@@ -1,0 +1,2936 @@
+{
+  "organization": [
+    {
+      "department_id": "1",
+      "department_name": "ВИЛАВИ",
+      "head": null,
+      "employees": [
+        {
+          "id": "70",
+          "name": "Юлия Перцева",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "72",
+          "name": "Багованый юзер",
+          "email": "nevazhno@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "74",
+          "name": "Светлана Пронина",
+          "email": "pronina.s@vilavi.com",
+          "position": "Заместитель главного бухгалтера",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "76",
+          "name": "Медведева Ольга",
+          "email": "medvedeva.o@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "78",
+          "name": "Соколова Виктория",
+          "email": "sokolova.v@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "80",
+          "name": "Чернова Валерия",
+          "email": "chernova.v@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "82",
+          "name": "Михайлова Надежда",
+          "email": "mikhailova.n@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "84",
+          "name": "Семенова Екатерина",
+          "email": "Semenova.e@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "88",
+          "name": "Федорченко Анастасия",
+          "email": "fedorova.o@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "92",
+          "name": "Мосина Маргарита",
+          "email": "mosina.m@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "94",
+          "name": "Краснопеева Александра",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "96",
+          "name": "Ковтунова Анастасия",
+          "email": "kovtunova.a@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "100",
+          "name": "Ожеховская Елена",
+          "email": "ojehovskaya.e@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "102",
+          "name": "Руснак Ирина",
+          "email": "rusnak.i@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "104",
+          "name": "Гунт Марианна",
+          "email": "gunt.m@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "108",
+          "name": "Черцов Вадим",
+          "email": "chercov.v@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "110",
+          "name": "Анна Власенко",
+          "email": "vlasenko.a@vilavi.com",
+          "position": "Бухгалтер",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "112",
+          "name": "User 112",
+          "email": "a.karzhenkov@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "114",
+          "name": "User 114",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "116",
+          "name": "User 116",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "118",
+          "name": "User 118",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "122",
+          "name": "User 122",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "124",
+          "name": "User 124",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "126",
+          "name": "User 126",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "128",
+          "name": "User 128",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "172",
+          "name": "User 172",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "228",
+          "name": "User 228",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "232",
+          "name": "User 232",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "240",
+          "name": "User 240",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "242",
+          "name": "User 242",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "246",
+          "name": "User 246",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "254",
+          "name": "User 254",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "286",
+          "name": "User 286",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "359",
+          "name": "User 359",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "369",
+          "name": "User 369",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "371",
+          "name": "User 371",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "381",
+          "name": "User 381",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "433",
+          "name": "User 433",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "2",
+      "department_name": "Администрация",
+      "head": null,
+      "employees": [
+        {
+          "id": "10",
+          "name": "Олег Низомиддинов",
+          "email": "nizomiddinov.o@vilavi.com",
+          "position": "Исполнительный директор",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "18",
+          "name": "Денис Крицкий",
+          "email": "kritsky.d@vilavi.com",
+          "position": "Коммерческий директор",
+          "tasks": {
+            "total": 7,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "254",
+          "name": "User 254",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "427",
+          "name": "User 427",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "4",
+      "department_name": " IT департамент",
+      "head": null,
+      "employees": [
+        {
+          "id": "1",
+          "name": "Евгений Древс",
+          "email": "drews.e@vilavi.com",
+          "position": "Директор IT отдела и разработки",
+          "tasks": {
+            "total": 4,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "22",
+          "name": "Анна Подойникова",
+          "email": "podoinikova.a@vilavi.com",
+          "position": "Заместитель директора отдела IT и разработки",
+          "tasks": {
+            "total": 17,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 13,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "46",
+          "name": "Инна Черкашина",
+          "email": "cherkashina.i@vilavi.com",
+          "position": "Разработчик",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "60",
+          "name": "Владислав Третьяков",
+          "email": "tretyakov.v@vilavi.com",
+          "position": "Разработчик",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "62",
+          "name": "Михаил Терехин",
+          "email": "terehin.m@vilavi.com",
+          "position": "Разработчик",
+          "tasks": {
+            "total": 2,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "126",
+          "name": "User 126",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "138",
+          "name": "User 138",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "280",
+          "name": "User 280",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 4,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 2,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "38",
+      "department_name": "Отдел аналитики",
+      "head": null,
+      "employees": [
+        {
+          "id": "22",
+          "name": "Анна Подойникова",
+          "email": "podoinikova.a@vilavi.com",
+          "position": "Заместитель директора отдела IT и разработки",
+          "tasks": {
+            "total": 17,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 13,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "274",
+          "name": "User 274",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 20,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 11,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "40",
+      "department_name": "Отдел разработки",
+      "head": null,
+      "employees": [
+        {
+          "id": "307",
+          "name": "User 307",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 9,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 4,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "42",
+      "department_name": "Направление BackEnd",
+      "head": null,
+      "employees": [
+        {
+          "id": "60",
+          "name": "Владислав Третьяков",
+          "email": "tretyakov.v@vilavi.com",
+          "position": "Разработчик",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "62",
+          "name": "Михаил Терехин",
+          "email": "terehin.m@vilavi.com",
+          "position": "Разработчик",
+          "tasks": {
+            "total": 2,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "190",
+          "name": "User 190",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 4,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 3,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "272",
+          "name": "User 272",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "276",
+          "name": "User 276",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 18,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 4,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "278",
+          "name": "User 278",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "44",
+      "department_name": "Направление FrontEnd",
+      "head": null,
+      "employees": [
+        {
+          "id": "186",
+          "name": "User 186",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "282",
+          "name": "User 282",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "284",
+          "name": "User 284",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "73",
+      "department_name": "Направление тестирования",
+      "head": null,
+      "employees": [
+        {
+          "id": "373",
+          "name": "User 373",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "46",
+      "department_name": "Отдел администрирования",
+      "head": null,
+      "employees": [
+        {
+          "id": "40",
+          "name": "Сергей Новиков",
+          "email": "novikov.s@vilavi.com",
+          "position": "Сервис-менеджер IT",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "256",
+          "name": "User 256",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 8,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 3,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "270",
+          "name": "User 270",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "69",
+      "department_name": "Отдел 1С разработки",
+      "head": null,
+      "employees": [
+        {
+          "id": "140",
+          "name": "User 140",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 28,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 4,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "176",
+          "name": "User 176",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 13,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "355",
+          "name": "User 355",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 6,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "10",
+      "department_name": "Логистический департамент",
+      "head": null,
+      "employees": [
+        {
+          "id": "16",
+          "name": "Сергей Пронин",
+          "email": "pronin.s@vilavi.com",
+          "position": "Операционный директор",
+          "tasks": {
+            "total": 6,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 2,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "32",
+          "name": "Елена Гнездилова",
+          "email": "gnezdilova.e@vilavi.com",
+          "position": "Заместитель директора по логистике",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "98",
+          "name": "Екатерина Берденко",
+          "email": "",
+          "position": "Ведущий менеджер по работе с клиентами с функциями логиста",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "48",
+      "department_name": "Отдел снабжения",
+      "head": null,
+      "employees": [
+        {
+          "id": "50",
+          "name": "Ольга Шебалина",
+          "email": "zakup@vilavi.com",
+          "position": "Руководитель направления снабжение",
+          "tasks": {
+            "total": 38,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "292",
+          "name": "User 292",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 10,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 3,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "296",
+          "name": "User 296",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "311",
+          "name": "User 311",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 139,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 110,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "50",
+      "department_name": "Отдел управления товарными запасами",
+      "head": null,
+      "employees": [
+        {
+          "id": "70",
+          "name": "Юлия Перцева",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "132",
+          "name": "User 132",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 12,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "178",
+          "name": "User 178",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "180",
+          "name": "User 180",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 15,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "294",
+          "name": "User 294",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 11,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "52",
+      "department_name": "Отдел транспортная логистика",
+      "head": null,
+      "employees": [
+        {
+          "id": "32",
+          "name": "Елена Гнездилова",
+          "email": "gnezdilova.e@vilavi.com",
+          "position": "Заместитель директора по логистике",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "98",
+          "name": "Екатерина Берденко",
+          "email": "",
+          "position": "Ведущий менеджер по работе с клиентами с функциями логиста",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "288",
+          "name": "User 288",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 22,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "290",
+          "name": "User 290",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 4,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "309",
+          "name": "User 309",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 13,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "54",
+      "department_name": "Отдел складская логистика",
+      "head": null,
+      "employees": [
+        {
+          "id": "160",
+          "name": "User 160",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 14,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 2,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "56",
+      "department_name": "Склад Казахстан",
+      "head": null,
+      "employees": [
+        {
+          "id": "363",
+          "name": "User 363",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "365",
+          "name": "User 365",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "395",
+          "name": "User 395",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "58",
+      "department_name": "Склад Москва",
+      "head": null,
+      "employees": [
+        {
+          "id": "134",
+          "name": "User 134",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "321",
+          "name": "User 321",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "337",
+          "name": "User 337",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "389",
+          "name": "User 389",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "429",
+          "name": "User 429",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "60",
+      "department_name": "Склад Новосибирск",
+      "head": null,
+      "employees": [
+        {
+          "id": "317",
+          "name": "User 317",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "323",
+          "name": "User 323",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "325",
+          "name": "User 325",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "327",
+          "name": "User 327",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "329",
+          "name": "User 329",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "331",
+          "name": "User 331",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "341",
+          "name": "User 341",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "6",
+      "department_name": "Клиентский департамент",
+      "head": null,
+      "employees": [
+        {
+          "id": "12",
+          "name": "Анастасия Колчина",
+          "email": "kolchina.a@vilavi.com",
+          "position": "Директор по клиентскому сервису",
+          "tasks": {
+            "total": 6,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 2,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "28",
+          "name": "Елена Ракович",
+          "email": "rakovich.e@vilavi.com",
+          "position": "Заместитель директора по клиентскому сервису",
+          "tasks": {
+            "total": 5,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "56",
+          "name": "Анастасия Шевлякова",
+          "email": "shevlyakova.a@vilavi.com",
+          "position": "Менеджер по работе с клиентами",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "58",
+          "name": "Наталья Хрулева",
+          "email": "hruleva.n@vilavi.com",
+          "position": "Логист",
+          "tasks": {
+            "total": 4,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "64",
+          "name": "Игорь Табачиков",
+          "email": "tabachikov.i@vilavi.com",
+          "position": "Менеджер по сопровождению",
+          "tasks": {
+            "total": 41,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "266",
+          "name": "User 266",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "357",
+          "name": "User 357",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 7,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 7,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "425",
+          "name": "User 425",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "30",
+      "department_name": "Отдел первой линии поддержки",
+      "head": null,
+      "employees": [
+        {
+          "id": "377",
+          "name": "User 377",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "34",
+      "department_name": "Отдел работы с франшизами",
+      "head": null,
+      "employees": [
+        {
+          "id": "64",
+          "name": "Игорь Табачиков",
+          "email": "tabachikov.i@vilavi.com",
+          "position": "Менеджер по сопровождению",
+          "tasks": {
+            "total": 41,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "148",
+          "name": "User 148",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 12,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "385",
+          "name": "User 385",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "387",
+          "name": "User 387",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "36",
+      "department_name": "Отдел работы с юр. лицами",
+      "head": null,
+      "employees": [
+        {
+          "id": "142",
+          "name": "User 142",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "144",
+          "name": "User 144",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 9,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "146",
+          "name": "User 146",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 110,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "268",
+          "name": "User 268",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 30,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "8",
+      "department_name": "Маркетинговый департамент",
+      "head": null,
+      "employees": [
+        {
+          "id": "14",
+          "name": "Наталья Кокряцкая",
+          "email": "kokryatskaya.n@vilavi.com",
+          "position": "Заместитель руководителя отдела маркетинга по операционной деятельности",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "34",
+          "name": "Павел Царегородцев",
+          "email": "tzaregorodzov.p@vilavi.com",
+          "position": "Руководитель проектов",
+          "tasks": {
+            "total": 10,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 6,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "200",
+          "name": "User 200",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 4,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "224",
+          "name": "User 224",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 2,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "18",
+      "department_name": "Отдел бренд-менеджмента",
+      "head": null,
+      "employees": [
+        {
+          "id": "192",
+          "name": "User 192",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 17,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "196",
+          "name": "User 196",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 10,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 4,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "198",
+          "name": "User 198",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 26,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "218",
+          "name": "User 218",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 12,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "220",
+          "name": "User 220",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 12,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 2,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "250",
+          "name": "User 250",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 25,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 2,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "20",
+      "department_name": "Отдел event",
+      "head": null,
+      "employees": [
+        {
+          "id": "54",
+          "name": "Ольга Саркисова",
+          "email": "sarkisova.o@vilavi.com",
+          "position": "Старший event-менеджер",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "66",
+          "name": "Анастасия Скакун",
+          "email": "skakun.a@vilavi.com",
+          "position": "Старший event-менеджер",
+          "tasks": {
+            "total": 26,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "212",
+          "name": "User 212",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 5,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "431",
+          "name": "User 431",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "22",
+      "department_name": "Отдел дизайна",
+      "head": null,
+      "employees": [
+        {
+          "id": "44",
+          "name": "Юлия Грозовенко",
+          "email": "grozovenko.y@vilavi.com",
+          "position": "Фотограф-дизайнер",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "86",
+          "name": "Власова Юлия",
+          "email": "vlasova.y@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "214",
+          "name": "User 214",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 19,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 6,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "216",
+          "name": "User 216",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "335",
+          "name": "User 335",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 4,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 3,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "379",
+          "name": "User 379",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "393",
+          "name": "User 393",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "24",
+      "department_name": "Отдел маркетинговые коммуникации",
+      "head": null,
+      "employees": [
+        {
+          "id": "48",
+          "name": "Анастасия Федорченко",
+          "email": "fedorchenko.a@vilavi.com",
+          "position": "SEO-копирайтер",
+          "tasks": {
+            "total": 8,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 4,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "52",
+          "name": "Ольга Кретова",
+          "email": "Kretova.o@vilavi.com",
+          "position": "Руководитель направления маркетинговых коммуникаций",
+          "tasks": {
+            "total": 25,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "78",
+          "name": "Соколова Виктория",
+          "email": "sokolova.v@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "80",
+          "name": "Чернова Валерия",
+          "email": "chernova.v@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "88",
+          "name": "Федорченко Анастасия",
+          "email": "fedorova.o@vilavi.com",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "202",
+          "name": "User 202",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 21,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 4,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "204",
+          "name": "User 204",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 9,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "208",
+          "name": "User 208",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "210",
+          "name": "User 210",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "222",
+          "name": "User 222",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 4,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "333",
+          "name": "User 333",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "12",
+      "department_name": "Финансовый департамент",
+      "head": null,
+      "employees": [
+        {
+          "id": "20",
+          "name": "Алексей Вахляев",
+          "email": "vahlyaev.a@vilavi.com",
+          "position": "Заместитель финансового директора",
+          "tasks": {
+            "total": 24,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 5,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "64",
+      "department_name": "Отдел бухгалтерии",
+      "head": null,
+      "employees": [
+        {
+          "id": "106",
+          "name": "Ксения Герман",
+          "email": "",
+          "position": "Бухгалтер по расчету заработной платы и КДП",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "110",
+          "name": "Анна Власенко",
+          "email": "vlasenko.a@vilavi.com",
+          "position": "Бухгалтер",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "114",
+          "name": "User 114",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "130",
+          "name": "User 130",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "154",
+          "name": "User 154",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "158",
+          "name": "User 158",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 8,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "162",
+          "name": "User 162",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 11,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "164",
+          "name": "User 164",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "170",
+          "name": "User 170",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "339",
+          "name": "User 339",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 5,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "345",
+          "name": "User 345",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 2,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "349",
+          "name": "User 349",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 1,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "391",
+          "name": "User 391",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "77",
+      "department_name": "Направление казначейства",
+      "head": null,
+      "employees": [
+        {
+          "id": "166",
+          "name": "User 166",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "66",
+      "department_name": "Отдел аналитики",
+      "head": null,
+      "employees": [
+        {
+          "id": "20",
+          "name": "Алексей Вахляев",
+          "email": "vahlyaev.a@vilavi.com",
+          "position": "Заместитель финансового директора",
+          "tasks": {
+            "total": 24,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 5,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "116",
+          "name": "User 116",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "182",
+          "name": "User 182",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "303",
+          "name": "User 303",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 8,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "75",
+      "department_name": "Планово-экономическое направление",
+      "head": null,
+      "employees": [
+        {
+          "id": "168",
+          "name": "User 168",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 2,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "14",
+      "department_name": "Юридический департамент",
+      "head": null,
+      "employees": [
+        {
+          "id": "26",
+          "name": "Вячеслав Мельников",
+          "email": "melnikov.v@vilavi.com",
+          "position": "Директор по правовым вопросам",
+          "tasks": {
+            "total": 17,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "238",
+          "name": "User 238",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "260",
+          "name": "User 260",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "71",
+      "department_name": "Отдел работы с договорами",
+      "head": null,
+      "employees": [
+        {
+          "id": "24",
+          "name": "Наталия Андреева",
+          "email": "andreeva.n@vilavi.com",
+          "position": "Руководитель юридического отдела",
+          "tasks": {
+            "total": 17,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "262",
+          "name": "User 262",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "315",
+          "name": "User 315",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 5,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "16",
+      "department_name": "HR департамент",
+      "head": null,
+      "employees": [
+        {
+          "id": "30",
+          "name": "Инна Мирная",
+          "email": "mirnaya.i@vilavi.com",
+          "position": "Директор по персоналу",
+          "tasks": {
+            "total": 2,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "36",
+          "name": "Иптышев Никита",
+          "email": "iptyshev.n@vilavi.com",
+          "position": "HR-менеджер",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "38",
+          "name": "Валерия Белобородова",
+          "email": "beloborodova.v@vilavi.com",
+          "position": "Старший HR-менеджер",
+          "tasks": {
+            "total": 35,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 35,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "375",
+          "name": "User 375",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "28",
+      "department_name": "Отдел АХО",
+      "head": null,
+      "employees": [
+        {
+          "id": "258",
+          "name": "User 258",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 6,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 1,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "313",
+          "name": "User 313",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "347",
+          "name": "User 347",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "367",
+          "name": "User 367",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "383",
+          "name": "User 383",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 0,
+            "in_work": 0,
+            "overdue": 0,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    },
+    {
+      "department_id": "26",
+      "department_name": "Учебный центр",
+      "head": null,
+      "employees": [
+        {
+          "id": "224",
+          "name": "User 224",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 3,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 2,
+            "no_movement": 0
+          }
+        },
+        {
+          "id": "226",
+          "name": "User 226",
+          "email": "",
+          "position": "",
+          "tasks": {
+            "total": 18,
+            "in_work": 0,
+            "on_review": 0,
+            "awaiting": 0,
+            "postponed": 0,
+            "overdue": 0,
+            "no_deadline": 5,
+            "no_movement": 0
+          }
+        }
+      ],
+      "subdepartments": []
+    }
+  ]
+}
