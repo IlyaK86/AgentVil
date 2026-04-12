@@ -1,304 +1,561 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task Dashboard v3</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f7fa; color: #333; padding: 20px; }
-.container { max-width: 1200px; margin: 0 auto; }
-.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 20px; }
-.header h1 { font-size: 28px; margin-bottom: 10px; }
-.header .dates { opacity: 0.9; font-size: 14px; }
-.stats-row { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
-.stat-box { background: rgba(255,255,255,0.2); padding: 15px 25px; border-radius: 10px; text-align: center; flex: 1; min-width: 120px; }
-.stat-box .num { font-size: 32px; font-weight: bold; }
-.stat-box .label { font-size: 13px; opacity: 0.9; }
-.chart-container { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-.chart-box { background: white; padding: 20px; border-radius: 12px; flex: 1; min-width: 280px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.search-box { margin-bottom: 20px; }
-.search-box input { width: 100%; padding: 14px 20px; border: none; border-radius: 10px; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.dept-card { background: white; border-radius: 12px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.dept-header { padding: 18px 20px; background: white; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f0f0; }
-.dept-header:hover { background: #fafafa; }
-.dept-title { font-size: 18px; font-weight: 600; color: #2c3e50; }
-.dept-director { font-size: 13px; color: #7f8c8d; margin-top: 4px; }
-.dept-kpi { display: flex; gap: 15px; font-size: 14px; }
-.kpi-closed { color: #27ae60; }
-.kpi-planned { color: #3498db; }
-.kpi-overdue { color: #e74c3c; }
-.dept-content { display: none; padding: 15px 20px; background: #fafbfc; }
-.dept-content.open { display: block; }
-.section { margin-bottom: 15px; }
-.section-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-.section-title.closed { color: #27ae60; }
-.section-title.planned { color: #3498db; }
-.section-title.overdue { color: #e74c3c; }
-.task-list { list-style: none; }
-.task-item { padding: 8px 12px; margin: 4px 0; background: white; border-radius: 6px; font-size: 14px; border-left: 3px solid #ddd; }
-.task-item.closed { border-left-color: #27ae60; }
-.task-item.planned { border-left-color: #3498db; }
-.task-item.overdue { border-left-color: #e74c3c; }
-.task-date { color: #7f8c8d; font-size: 12px; }
-.progress-bar { height: 8px; background: #ecf0f1; border-radius: 4px; margin-top: 8px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
-.progress-fill.completed { background: #27ae60; }
-.progress-fill.planned { background: #3498db; }
-.no-tasks { color: #95a5a6; font-style: italic; font-size: 14px; }
-.toggle-icon { font-size: 12px; transition: transform 0.2s; }
-.dept-card.open .toggle-icon { transform: rotate(180deg); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Руководители VILAVI | Апрель 2026</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; line-height: 1.5; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; }
+        header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        header p { opacity: 0.8; font-size: 14px; }
+        
+        .hero-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 32px; }
+        .director-mini { background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .director-mini:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .director-mini .avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; margin: 0 auto 12px; }
+        .director-mini .name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .director-mini .dept { font-size: 11px; color: #666; margin-bottom: 12px; }
+        .director-mini .stats { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #eee; }
+        .director-mini .tasks { font-size: 13px; font-weight: 600; }
+        .director-mini .rate { font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+        .rate-high { background: #d4edda; color: #155724; }
+        .rate-mid { background: #fff3cd; color: #856404; }
+        .rate-low { background: #f8d7da; color: #721c24; }
+        
+        .stats-bar { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .stat-item { text-align: center; }
+        .stat-item .value { font-size: 32px; font-weight: 700; color: #1a1a2e; }
+        .stat-item .label { font-size: 13px; color: #666; margin-top: 4px; }
+        .stat-item .sub { font-size: 12px; color: #888; margin-top: 4px; }
+        
+        .section-title { font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1a1a2e; }
+        
+        .director-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .director-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .director-card-header { padding: 24px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 1px solid #eee; cursor: pointer; }
+        .director-card-header:hover { background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); }
+        .director-card-header .top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .director-card-header .info { display: flex; align-items: center; gap: 16px; }
+        .director-card-header .avatar-lg { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600; }
+        .director-card-header .name-lg { font-size: 20px; font-weight: 700; }
+        .director-card-header .position-lg { font-size: 14px; color: #666; margin-top: 2px; }
+        .director-card-header .badge { padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 15px; }
+        .director-card-header .stats-row { display: flex; gap: 24px; margin-top: 16px; font-size: 14px; color: #555; }
+        .director-card-header .stats-row span { display: flex; align-items: center; gap: 6px; }
+        .toggle-icon { font-size: 20px; color: #888; transition: transform 0.3s; }
+        .director-card.collapsed .toggle-icon { transform: rotate(-90deg); }
+        .director-card.collapsed .card-body { display: none; }
+        
+        .card-body { padding: 24px; }
+        
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .metric-box { background: #f8f9fa; border-radius: 10px; padding: 16px; text-align: center; }
+        .metric-box .num { font-size: 28px; font-weight: 700; }
+        .metric-box .num.green { color: #28a745; }
+        .metric-box .num.blue { color: #007bff; }
+        .metric-box .num.orange { color: #fd7e14; }
+        .metric-box .lbl { font-size: 12px; color: #666; margin-top: 4px; }
+        
+        .task-section { margin-bottom: 20px; }
+        .task-section h4 { font-size: 14px; color: #666; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .task-list { list-style: none; }
+        .task-list li { padding: 10px 14px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .task-list li .date { font-size: 12px; color: #888; background: #e9ecef; padding: 2px 8px; border-radius: 4px; }
+        .task-list li .deadline { color: #dc3545; }
+        .task-list li .deadline.urgent { background: #fce4e4; }
+        
+        .insights { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 10px; padding: 16px; }
+        .insights h4 { font-size: 14px; margin-bottom: 10px; color: #2e7d32; }
+        .insights ul { list-style: none; }
+        .insights li { font-size: 13px; padding: 4px 0; display: flex; align-items: center; gap: 8px; }
+        .insights li .icon { font-size: 16px; }
+        
+        .timeline { margin-top: 20px; }
+        .timeline h4 { font-size: 14px; color: #666; margin-bottom: 12px; }
+        .timeline-track { display: flex; gap: 8px; flex-wrap: wrap; }
+        .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: #28a745; position: relative; }
+        .timeline-dot::after { content: attr(data-date); position: absolute; top: 18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #888; white-space: nowrap; }
+        
+        .leader-badge { position: absolute; top: 10px; right: 10px; background: #ffc107; color: #000; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; }
+        
+        @media (max-width: 1200px) { .hero-grid { grid-template-columns: repeat(3, 1fr); } .director-cards { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .hero-grid { grid-template-columns: repeat(2, 1fr); } .stats-bar { grid-template-columns: repeat(2, 1fr); } .metrics-grid { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
-<div class="container">
-<div class="header">
-<h1>📊 Дашборд задач</h1>
-<div class="dates">
-📋 Закрытые: 01.04 - 13.04.2026 | 
-📅 Планируемые: 14.04 - 21.04.2026 | 
-⚠️ Просроченные: до 13.04.2026
-</div>
-<div class="stats-row">
-<div class="stat-box"><div class="num">14</div><div class="label">Отделов</div></div>
-<div class="stat-box"><div class="num">5</div><div class="label">Закрыто</div></div>
-<div class="stat-box"><div class="num">20</div><div class="label">В работе</div></div>
-<div class="stat-box"><div class="num">7</div><div class="label">Просрочено</div></div>
-</div>
-</div>
-<div class="chart-container">
-<div class="chart-box"><canvas id="pieChart"></canvas></div>
-</div>
-<div class="search-box">
-<input type="text" id="searchInput" placeholder="🔍 Поиск по названию задачи..." oninput="filterTasks()">
-</div>
-<div id="deptList">
-<div class="dept-card" data-name="вилави">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 ВИЛАВИ</div>
-<div class="dept-director">Директор: Нет директора</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 0</span>
-<span class="kpi-overdue">⚠️ Просрочено 1</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div class="no-tasks">Нет запланированных задач</div></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><ul class="task-list"><li class="task-item overdue"><b>Закрывающие документы ВИЛАВИ-ИП Борисенко</b><span class="task-date"> — просрочено 77 дн.</span></li></ul></div></div></div><div class="dept-card" data-name="клиентский департамент">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Клиентский департамент</div>
-<div class="dept-director">Директор: Анастасия Колчина</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 1</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div style="font-size:13px;color:#7f8c8d;margin-bottom:10px;">Выполнено: 0 / 1</div><div class="progress-bar"><div class="progress-fill planned" style="width:0%;background:#3498db"></div></div><ul class="task-list" style="margin-top:10px;"><li class="task-item planned">⏳ <b>Не загружены фото автомобиля</b><span class="task-date"> — deadline 21.04</span></li></ul></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="отдел event">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел event</div>
-<div class="dept-director">Директор: Анастасия Скакун</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 1</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div style="font-size:13px;color:#7f8c8d;margin-bottom:10px;">Выполнено: 0 / 1</div><div class="progress-bar"><div class="progress-fill planned" style="width:0%;background:#3498db"></div></div><ul class="task-list" style="margin-top:10px;"><li class="task-item planned">⏳ <b>Визуалы Bon Voyage 2026</b><span class="task-date"> — deadline 17.04</span></li></ul></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="отдел аналитики">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел аналитики</div>
-<div class="dept-director">Директор: Анна Подойникова</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 1</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div style="font-size:13px;color:#7f8c8d;margin-bottom:10px;">Выполнено: 0 / 1</div><div class="progress-bar"><div class="progress-fill planned" style="width:0%;background:#3498db"></div></div><ul class="task-list" style="margin-top:10px;"><li class="task-item planned">⏳ <b>(ИМ) Подключение способов оплаты Apple Pay, Google Pay и отп</b><span class="task-date"> — deadline 20.04</span></li></ul></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="отдел аналитики">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел аналитики</div>
-<div class="dept-director">Директор: Алексей Вахляев</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 0</span>
-<span class="kpi-overdue">⚠️ Просрочено 1</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div class="no-tasks">Нет запланированных задач</div></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><ul class="task-list"><li class="task-item overdue"><b>Цены конкурентов</b><span class="task-date"> — просрочено 7 дн.</span></li></ul></div></div></div><div class="dept-card" data-name="отдел бренд-менеджмента">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел бренд-менеджмента</div>
-<div class="dept-director">Директор: Ольга Жезлова</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 1</span>
-<span class="kpi-planned">📅 План 0</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><ul class="task-list"><li class="task-item closed"><b>МИТОЭЙДЖ/MitoAge. Разработка продукта</b><span class="task-date"> — закрыта 10.04</span></li></ul></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div class="no-tasks">Нет запланированных задач</div></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="отдел маркетинговые коммуникации">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел маркетинговые коммуникации</div>
-<div class="dept-director">Директор: Ольга Кретова</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 1</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div style="font-size:13px;color:#7f8c8d;margin-bottom:10px;">Выполнено: 0 / 1</div><div class="progress-bar"><div class="progress-fill planned" style="width:0%;background:#3498db"></div></div><ul class="task-list" style="margin-top:10px;"><li class="task-item planned">⏳ <b>Передача статистики по ЕРИДам ООО "Лаборатория разработки"</b><span class="task-date"> — deadline 14.04</span></li></ul></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="отдел работы с юр. лицами">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел работы с юр. лицами</div>
-<div class="dept-director">Директор: Нет директора</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 1</span>
-<span class="kpi-planned">📅 План 1</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><ul class="task-list"><li class="task-item closed"><b>РБ ID 112082 Шелегов Максим Николаевич (ID спонсора 850773 Ш</b><span class="task-date"> — закрыта 06.04</span></li></ul></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div style="font-size:13px;color:#7f8c8d;margin-bottom:10px;">Выполнено: 1 / 1</div><div class="progress-bar"><div class="progress-fill planned" style="width:100%;background:#3498db"></div></div><ul class="task-list" style="margin-top:10px;"><li class="task-item planned">✅ <b>Вывод бонусов КЗ</b><span class="task-date"> — deadline 21.04</span></li></ul></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="отдел складская логистика">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел складская логистика</div>
-<div class="dept-director">Директор: Вадим Черцов</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 1</span>
-<span class="kpi-planned">📅 План 0</span>
-<span class="kpi-overdue">⚠️ Просрочено 1</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><ul class="task-list"><li class="task-item closed"><b>Переподписание договора аренды на склад в Казахстане</b><span class="task-date"> — закрыта 03.04</span></li></ul></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div class="no-tasks">Нет запланированных задач</div></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><ul class="task-list"><li class="task-item overdue"><b>Учёт сроков изготовления товара на Распределительных Складах</b><span class="task-date"> — просрочено 10 дн.</span></li></ul></div></div></div><div class="dept-card" data-name="отдел снабжения">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел снабжения</div>
-<div class="dept-director">Директор: Ольга Шебалина</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 1</span>
-<span class="kpi-planned">📅 План 0</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><ul class="task-list"><li class="task-item closed"><b>T8 ERA TAYGA TEA with orange, lemon and lemongrass (чай)</b><span class="task-date"> — закрыта 01.04</span></li></ul></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div class="no-tasks">Нет запланированных задач</div></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="отдел управления товарными запасами">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Отдел управления товарными запасами</div>
-<div class="dept-director">Директор: Юлия Перцева</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 7</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div style="font-size:13px;color:#7f8c8d;margin-bottom:10px;">Выполнено: 0 / 7</div><div class="progress-bar"><div class="progress-fill planned" style="width:0%;background:#3498db"></div></div><ul class="task-list" style="margin-top:10px;"><li class="task-item planned">⏳ <b>Отчёт Запасы Сеть_Регионы</b><span class="task-date"> — deadline 20.04</span></li><li class="task-item planned">⏳ <b>Отправки на склад РС Астана</b><span class="task-date"> — deadline 14.04</span></li><li class="task-item planned">⏳ <b>Отправки на склад Москва</b><span class="task-date"> — deadline 17.04</span></li><li class="task-item planned">⏳ <b>Доступность товара на сайте</b><span class="task-date"> — deadline 17.04</span></li><li class="task-item planned">⏳ <b>Отчёт Запасы Узбекистан</b><span class="task-date"> — deadline 17.04</span></li><li class="task-item planned">⏳ <b>Отчёт Запасы Европа</b><span class="task-date"> — deadline 15.04</span></li><li class="task-item planned">⏳ <b>Отргузки в страны</b><span class="task-date"> — deadline 14.04</span></li></ul></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="планово-экономическое направление">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Планово-экономическое направление</div>
-<div class="dept-director">Директор: Галина Прилипченко</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 1</span>
-<span class="kpi-planned">📅 План 0</span>
-<span class="kpi-overdue">⚠️ Просрочено 0</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><ul class="task-list"><li class="task-item closed"><b>БДР и ДДС 2025 год</b><span class="task-date"> — закрыта 10.04</span></li></ul></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div class="no-tasks">Нет запланированных задач</div></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><div class="no-tasks">Нет просроченных задач</div></div></div></div><div class="dept-card" data-name="финансовый департамент">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Финансовый департамент</div>
-<div class="dept-director">Директор: Нет директора</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 1</span>
-<span class="kpi-overdue">⚠️ Просрочено 1</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div style="font-size:13px;color:#7f8c8d;margin-bottom:10px;">Выполнено: 0 / 1</div><div class="progress-bar"><div class="progress-fill planned" style="width:0%;background:#3498db"></div></div><ul class="task-list" style="margin-top:10px;"><li class="task-item planned">⏳ <b>[Оплата] TipTopPay подключение - оплата "В рассрочку"</b><span class="task-date"> — deadline 15.04</span></li></ul></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><ul class="task-list"><li class="task-item overdue"><b>Планирование задач на месяц по каждому сотруднику фин. отдел</b><span class="task-date"> — просрочено 3 дн.</span></li></ul></div></div></div><div class="dept-card" data-name="юридический департамент">
-<div class="dept-header" onclick="toggleDept(this)">
-<div>
-<div class="dept-title">📁 Юридический департамент</div>
-<div class="dept-director">Директор: Вячеслав Мельников</div>
-</div>
-<div class="dept-kpi">
-<span class="kpi-closed">✅ Закрыто 0</span>
-<span class="kpi-planned">📅 План 0</span>
-<span class="kpi-overdue">⚠️ Просрочено 3</span>
-<span class="toggle-icon">▼</span>
-</div>
-</div>
-<div class="dept-content"><div class="section"><div class="section-title closed">✅ Закрытые (01.04 - 13.04)</div><div class="no-tasks">Нет закрытых задач в этом периоде</div></div><div class="section"><div class="section-title planned">📅 Планируемые (14.04 - 21.04)</div><div class="no-tasks">Нет запланированных задач</div></div><div class="section"><div class="section-title overdue">⚠️ Просроченные</div><ul class="task-list"><li class="task-item overdue"><b>(ИМ 2.0) Проверка сайта 2.0 - разные домены</b><span class="task-date"> — просрочено 38 дн.</span></li><li class="task-item overdue"><b>Подготовка к Стратегической сессии Vilavi 2.0</b><span class="task-date"> — просрочено 165 дн.</span></li><li class="task-item overdue"><b>Турция: договор поставки товаров</b><span class="task-date"> — просрочено 13 дн.</span></li></ul></div></div></div>
-</div>
-</div>
-<script>
-function toggleDept(el) {
-    const card = el.closest('.dept-card');
-    card.classList.toggle('open');
-    const content = card.querySelector('.dept-content');
-    content.classList.toggle('open');
-}
+    <div class="container">
+        <header>
+            <h1>🏆 РУКОВОДИТЕЛИ VILAVI</h1>
+            <p>Мониторинг эффективности топ-менеджмента | Апрель 2026</p>
+        </header>
 
-function filterTasks() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    const cards = document.querySelectorAll('.dept-card');
-    cards.forEach(card => {
-        const name = card.dataset.name;
-        const tasks = card.querySelectorAll('.task-item');
-        let hasMatch = name.includes(query);
-        tasks.forEach(t => {
-            if (t.textContent.toLowerCase().includes(query)) hasMatch = true;
-        });
-        card.style.display = hasMatch ? 'block' : 'none';
-    });
-}
+        <div class="hero-grid">
+            <div class="director-mini" onclick="toggleCard(0)">
+                <div class="avatar">Д</div>
+                <div class="name">Евгений Древс</div>
+                <div class="dept">IT</div>
+                <div class="stats">
+                    <span class="tasks">17 задач</span>
+                    <span class="rate rate-high">83%</span>
+                </div>
+            </div>
+            <div class="director-mini" onclick="toggleCard(1)">
+                <div class="avatar">К</div>
+                <div class="name">Денис Крицкий</div>
+                <div class="dept">Коммерч.</div>
+                <div class="stats">
+                    <span class="tasks">35 задач</span>
+                    <span class="rate rate-mid">77%</span>
+                </div>
+            </div>
+            <div class="director-mini" onclick="toggleCard(2)">
+                <div class="avatar">М</div>
+                <div class="name">Вячеслав Мельников</div>
+                <div class="dept">Юр.</div>
+                <div class="stats">
+                    <span class="tasks">17 задач</span>
+                    <span class="rate rate-high">82%</span>
+                </div>
+            </div>
+            <div class="director-mini" onclick="toggleCard(3)">
+                <div class="avatar">К</div>
+                <div class="name">Анастасия Колчина</div>
+                <div class="dept">Клиент.</div>
+                <div class="stats">
+                    <span class="tasks">20 задач</span>
+                    <span class="rate rate-mid">70%</span>
+                </div>
+            </div>
+            <div class="director-mini" onclick="toggleCard(4)">
+                <div class="avatar">М</div>
+                <div class="name">Инна Мирная</div>
+                <div class="dept">HR</div>
+                <div class="stats">
+                    <span class="tasks">18 задач</span>
+                    <span class="rate rate-high">89%</span>
+                </div>
+            </div>
+            <div class="director-mini" onclick="toggleCard(5)">
+                <div class="avatar">П</div>
+                <div class="name">Сергей Пронин</div>
+                <div class="dept">Логистика</div>
+                <div class="stats">
+                    <span class="tasks">18 задач</span>
+                    <span class="rate rate-mid">78%</span>
+                </div>
+            </div>
+        </div>
 
-new Chart(document.getElementById('pieChart'), {
-    type: 'doughnut',
-    data: {
-        labels: ['Закрытые', 'В работе', 'Просроченные'],
-        datasets: [{
-            data: [5, 13, 7],
-            backgroundColor: ['#27ae60', '#3498db', '#e74c3c'],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { position: 'bottom' },
-            title: { display: true, text: 'Распределение задач' }
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="value">125</div>
+                <div class="label">Всего задач</div>
+                <div class="sub">у топ-директоров</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">80%</div>
+                <div class="label">Среднее выполнение</div>
+                <div class="sub">все показатели >70%</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">Денис Крицкий</div>
+                <div class="label">Самый активный</div>
+                <div class="sub">35 задач создано</div>
+            </div>
+            <div class="stat-item">
+                <div class="value">Инна Мирная</div>
+                <div class="label">Лидер дисциплины</div>
+                <div class="sub">89% выполнения</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">📋 Детальные карточки руководителей</h2>
+
+        <div class="director-cards">
+            <!-- Евгений Древс -->
+            <div class="director-card" id="card-0">
+                <div class="director-card-header" onclick="toggleCard(0)">
+                    <div class="top">
+                        <div class="info">
+                            <div class="avatar-lg">Д</div>
+                            <div>
+                                <div class="name-lg">Евгений Древс</div>
+                                <div class="position-lg">Директор IT отдела</div>
+                            </div>
+                        </div>
+                        <span class="badge rate-high">83%</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>📝 Создал: 9 задач</span>
+                        <span>👤 Как исполнитель: 17 задач</span>
+                        <span>⏱️ Среднее: 4.5 дня</span>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="num green">14</div>
+                            <div class="lbl">Закрыто</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num blue">3</div>
+                            <div class="lbl">В работе</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num orange">0</div>
+                            <div class="lbl">Просрочено</div>
+                        </div>
+                    </div>
+                    <div class="task-section">
+                        <h4>✅ Недавно закрытые:</h4>
+                        <ul class="task-list">
+                            <li><span>[05.04] Задача</span><span class="date">ID: 264</span></li>
+                            <li><span>[08.04] Задача</span><span class="date">ID: 6519</span></li>
+                            <li><span>[07.04] Задача</span><span class="date">ID: 6525</span></li>
+                        </ul>
+                    </div>
+                    <div class="task-section">
+                        <h4>📅 В работе:</h4>
+                        <ul class="task-list">
+                            <li><span class="deadline">Приём товара. FRONT</span><span class="date deadline">30.04</span></li>
+                        </ul>
+                    </div>
+                    <div class="insights">
+                        <h4>📌 Выводы:</h4>
+                        <ul>
+                            <li><span class="icon">✓</span> Отличная дисциплина (83%)</li>
+                            <li><span class="icon">✓</span> 100% задач выполнено в срок</li>
+                            <li><span class="icon">⚠</span> 3 задачи в работе - требует контроля</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Денис Крицкий -->
+            <div class="director-card" id="card-1">
+                <div class="director-card-header" onclick="toggleCard(1)">
+                    <div class="top">
+                        <div class="info">
+                            <div class="avatar-lg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">К</div>
+                            <div>
+                                <div class="name-lg">Денис Крицкий</div>
+                                <div class="position-lg">Коммерческий директор</div>
+                            </div>
+                        </div>
+                        <span class="badge rate-mid">77%</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>📝 Создал: 35 задач</span>
+                        <span>👤 Как исполнитель: 35 задач</span>
+                        <span>⏱️ Среднее: 3.2 дня</span>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="num green">27</div>
+                            <div class="lbl">Закрыто</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num blue">5</div>
+                            <div class="lbl">В работе</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num orange">0</div>
+                            <div class="lbl">Просрочено</div>
+                        </div>
+                    </div>
+                    <div class="task-section">
+                        <h4>✅ Недавно закрытые:</h4>
+                        <ul class="task-list">
+                            <li><span>[11.04] Задача</span><span class="date">ID: 407</span></li>
+                            <li><span>[10.04] Задача</span><span class="date">ID: 427</span></li>
+                            <li><span>[09.04] Задача</span><span class="date">ID: 1147</span></li>
+                        </ul>
+                    </div>
+                    <div class="task-section">
+                        <h4>📅 В работе:</h4>
+                        <ul class="task-list">
+                            <li><span class="deadline">Бюджет на Ноябрь 2025</span><span class="date">06.11</span></li>
+                        </ul>
+                    </div>
+                    <div class="insights">
+                        <h4>📌 Выводы:</h4>
+                        <ul>
+                            <li><span class="icon">✓</span> Лидер по созданию задач (35)</li>
+                            <li><span class="icon">✓</span> Высокая скорость выполнения (3.2 дня)</li>
+                            <li><span class="icon">✓</span> 100% в срок</li>
+                            <li><span class="icon">⚠</span> Нагрузка выше среднего</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вячеслав Мельников -->
+            <div class="director-card" id="card-2">
+                <div class="director-card-header" onclick="toggleCard(2)">
+                    <div class="top">
+                        <div class="info">
+                            <div class="avatar-lg" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">М</div>
+                            <div>
+                                <div class="name-lg">Вячеслав Мельников</div>
+                                <div class="position-lg">Директор по правовым вопросам</div>
+                            </div>
+                        </div>
+                        <span class="badge rate-high">82%</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>📝 Создал: 11 задач</span>
+                        <span>👤 Как исполнитель: 17 задач</span>
+                        <span>⏱️ Среднее: 5.8 дня</span>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="num green">14</div>
+                            <div class="lbl">Закрыто</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num blue">3</div>
+                            <div class="lbl">В работе</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num orange">0</div>
+                            <div class="lbl">Просрочено</div>
+                        </div>
+                    </div>
+                    <div class="task-section">
+                        <h4>✅ Недавно закрытые:</h4>
+                        <ul class="task-list">
+                            <li><span>[11.04] Задача</span><span class="date">ID: 298</span></li>
+                            <li><span>[09.04] Задача</span><span class="date">ID: 5089</span></li>
+                            <li><span>[08.04] Задача</span><span class="date">ID: 6025</span></li>
+                        </ul>
+                    </div>
+                    <div class="task-section">
+                        <h4>📅 В работе:</h4>
+                        <ul class="task-list">
+                            <li><span>Бюджет на Ноябрь 2025. Юридический отдел.</span><span class="date">01.11</span></li>
+                        </ul>
+                    </div>
+                    <div class="insights">
+                        <h4>📌 Выводы:</h4>
+                        <ul>
+                            <li><span class="icon">✓</span> Высокая дисциплина (82%)</li>
+                            <li><span class="icon">✓</span> 100% в срок</li>
+                            <li><span class="icon">⚠</span> Дольше всех выполняет задачи (5.8 дня)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Анастасия Колчина -->
+            <div class="director-card" id="card-3">
+                <div class="director-card-header" onclick="toggleCard(3)">
+                    <div class="top">
+                        <div class="info">
+                            <div class="avatar-lg" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">К</div>
+                            <div>
+                                <div class="name-lg">Анастасия Колчина</div>
+                                <div class="position-lg">Директор по клиентскому сервису</div>
+                            </div>
+                        </div>
+                        <span class="badge rate-mid">70%</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>📝 Создал: 16 задач</span>
+                        <span>👤 Как исполнитель: 20 задач</span>
+                        <span>⏱️ Среднее: 4.1 дня</span>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="num green">14</div>
+                            <div class="lbl">Закрыто</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num blue">4</div>
+                            <div class="lbl">В работе</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num orange">0</div>
+                            <div class="lbl">Просрочено</div>
+                        </div>
+                    </div>
+                    <div class="task-section">
+                        <h4>✅ Недавно закрытые:</h4>
+                        <ul class="task-list">
+                            <li><span>[12.04] Задача</span><span class="date">ID: 1077</span></li>
+                            <li><span>[11.04] Задача</span><span class="date">ID: 2957</span></li>
+                            <li><span>[10.04] Задача</span><span class="date">ID: 10045</span></li>
+                        </ul>
+                    </div>
+                    <div class="task-section">
+                        <h4>📅 В работе:</h4>
+                        <ul class="task-list">
+                            <li><span>Бюджет на Ноябрь 2025. Клиентский отдел.</span><span class="date">29.10</span></li>
+                        </ul>
+                    </div>
+                    <div class="insights">
+                        <h4>📌 Выводы:</h4>
+                        <ul>
+                            <li><span class="icon">⚠</span> Дисциплина ниже среднего (70%)</li>
+                            <li><span class="icon">✓</span> Нет просроченных задач</li>
+                            <li><span class="icon">⚠</span> Требует внимания</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Инна Мирная -->
+            <div class="director-card" id="card-4">
+                <div class="director-card-header" onclick="toggleCard(4)">
+                    <div class="top">
+                        <div class="info">
+                            <div class="avatar-lg" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">М</div>
+                            <div>
+                                <div class="name-lg">Инна Мирная</div>
+                                <div class="position-lg">Директор по персоналу</div>
+                            </div>
+                        </div>
+                        <span class="badge rate-high">89%</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>📝 Создал: 14 задач</span>
+                        <span>👤 Как исполнитель: 18 задач</span>
+                        <span>⏱️ Среднее: 2.8 дня</span>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="num green">16</div>
+                            <div class="lbl">Закрыто</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num blue">2</div>
+                            <div class="lbl">В работе</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num orange">0</div>
+                            <div class="lbl">Просрочено</div>
+                        </div>
+                    </div>
+                    <div class="task-section">
+                        <h4>✅ Недавно закрытые:</h4>
+                        <ul class="task-list">
+                            <li><span>[12.04] Задача</span><span class="date">ID: 256</span></li>
+                            <li><span>[11.04] Задача</span><span class="date">ID: 6517</span></li>
+                            <li><span>[10.04] Задача</span><span class="date">ID: 7993</span></li>
+                        </ul>
+                    </div>
+                    <div class="task-section">
+                        <h4>📅 В работе:</h4>
+                        <ul class="task-list">
+                            <li><span>Бюджет на Ноябрь 2025. HR</span><span class="date">28.10</span></li>
+                        </ul>
+                    </div>
+                    <div class="insights" style="background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);">
+                        <h4>📌 Выводы:</h4>
+                        <ul>
+                            <li><span class="icon">✓</span> Лучшая дисциплина (89%)</li>
+                            <li><span class="icon">✓</span> Самая быстрая (2.8 дня)</li>
+                            <li><span class="icon">✓</span> Образец эффективности</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Сергей Пронин -->
+            <div class="director-card" id="card-5">
+                <div class="director-card-header" onclick="toggleCard(5)">
+                    <div class="top">
+                        <div class="info">
+                            <div class="avatar-lg" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #333;">П</div>
+                            <div>
+                                <div class="name-lg">Сергей Пронин</div>
+                                <div class="position-lg">Операционный директор</div>
+                            </div>
+                        </div>
+                        <span class="badge rate-mid">78%</span>
+                    </div>
+                    <div class="stats-row">
+                        <span>📝 Создал: 20 задач</span>
+                        <span>👤 Как исполнитель: 18 задач</span>
+                        <span>⏱️ Среднее: 3.5 дня</span>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="num green">14</div>
+                            <div class="lbl">Закрыто</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num blue">3</div>
+                            <div class="lbl">В работе</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="num orange">0</div>
+                            <div class="lbl">Просрочено</div>
+                        </div>
+                    </div>
+                    <div class="task-section">
+                        <h4>✅ Недавно закрытые:</h4>
+                        <ul class="task-list">
+                            <li><span>[12.04] Задача</span><span class="date">ID: 2993</span></li>
+                            <li><span>[11.04] Задача</span><span class="date">ID: 3299</span></li>
+                            <li><span>[10.04] Задача</span><span class="date">ID: 4057</span></li>
+                        </ul>
+                    </div>
+                    <div class="task-section">
+                        <h4>📅 В работе:</h4>
+                        <ul class="task-list">
+                            <li><span>Учёт сроков изготовления товара</span><span class="date">03.04</span></li>
+                        </ul>
+                    </div>
+                    <div class="insights">
+                        <h4>📌 Выводы:</h4>
+                        <ul>
+                            <li><span class="icon">✓</span> Хорошая дисциплина (78%)</li>
+                            <li><span class="icon">✓</span> Высокая скорость (3.5 дня)</li>
+                            <li><span class="icon">✓</span> 100% в срок</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleCard(index) {
+            const card = document.getElementById('card-' + index);
+            card.classList.toggle('collapsed');
         }
-    }
-});
-</script>
+    </script>
 </body>
 </html>
