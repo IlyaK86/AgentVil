@@ -3,559 +3,566 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Руководители VILAVI | Апрель 2026</title>
+    <title>Дашборд задач директоров</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; line-height: 1.5; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6f8; padding: 20px; }
         
-        header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; }
-        header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-        header p { opacity: 0.8; font-size: 14px; }
+        h1 { text-align: center; margin-bottom: 20px; color: #1a1a1a; }
         
-        .hero-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 32px; }
-        .director-mini { background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
-        .director-mini:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-        .director-mini .avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; margin: 0 auto 12px; }
-        .director-mini .name { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
-        .director-mini .dept { font-size: 11px; color: #666; margin-bottom: 12px; }
-        .director-mini .stats { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #eee; }
-        .director-mini .tasks { font-size: 13px; font-weight: 600; }
-        .director-mini .rate { font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
-        .rate-high { background: #d4edda; color: #155724; }
-        .rate-mid { background: #fff3cd; color: #856404; }
-        .rate-low { background: #f8d7da; color: #721c24; }
+        .search-box { max-width: 600px; margin: 0 auto 20px; }
+        .search-box input { width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; }
         
-        .stats-bar { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .stat-item { text-align: center; }
-        .stat-item .value { font-size: 32px; font-weight: 700; color: #1a1a2e; }
-        .stat-item .label { font-size: 13px; color: #666; margin-top: 4px; }
-        .stat-item .sub { font-size: 12px; color: #888; margin-top: 4px; }
+        .hero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; max-width: 1200px; margin: 0 auto 24px; }
+        .hero-card { background: #fff; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .hero-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+        .hero-card .name { font-weight: 600; font-size: 14px; margin-bottom: 4px; color: #333; }
+        .hero-card .dept { font-size: 12px; color: #666; margin-bottom: 8px; }
+        .hero-card .count { font-size: 28px; font-weight: 700; color: #0066cc; }
+        .hero-card .count-label { font-size: 11px; color: #999; }
         
-        .section-title { font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1a1a2e; }
+        .detail-section { max-width: 1200px; margin: 0 auto; }
         
-        .director-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .director-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .director-card-header { padding: 24px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 1px solid #eee; cursor: pointer; }
-        .director-card-header:hover { background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); }
-        .director-card-header .top { display: flex; justify-content: space-between; align-items: flex-start; }
-        .director-card-header .info { display: flex; align-items: center; gap: 16px; }
-        .director-card-header .avatar-lg { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600; }
-        .director-card-header .name-lg { font-size: 20px; font-weight: 700; }
-        .director-card-header .position-lg { font-size: 14px; color: #666; margin-top: 2px; }
-        .director-card-header .badge { padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 15px; }
-        .director-card-header .stats-row { display: flex; gap: 24px; margin-top: 16px; font-size: 14px; color: #555; }
-        .director-card-header .stats-row span { display: flex; align-items: center; gap: 6px; }
-        .toggle-icon { font-size: 20px; color: #888; transition: transform 0.3s; }
-        .director-card.collapsed .toggle-icon { transform: rotate(-90deg); }
-        .director-card.collapsed .card-body { display: none; }
+        .director-card { background: #fff; border-radius: 12px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         
-        .card-body { padding: 24px; }
+        .director-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+        .director-header:hover { background: #f9f9f9; }
+        .director-header .title { display: flex; align-items: center; gap: 12px; }
+        .director-header h3 { font-size: 16px; color: #1a1a1a; }
+        .director-header .badge { background: #e8f0fe; color: #1a73e8; padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 500; }
+        .director-header .arrow { transition: transform 0.3s; color: #666; }
+        .director-card.expanded .arrow { transform: rotate(180deg); }
         
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-        .metric-box { background: #f8f9fa; border-radius: 10px; padding: 16px; text-align: center; }
-        .metric-box .num { font-size: 28px; font-weight: 700; }
-        .metric-box .num.green { color: #28a745; }
-        .metric-box .num.blue { color: #007bff; }
-        .metric-box .num.orange { color: #fd7e14; }
-        .metric-box .lbl { font-size: 12px; color: #666; margin-top: 4px; }
+        .director-content { display: none; padding: 0 20px 20px; }
+        .director-card.expanded .director-content { display: block; }
         
-        .task-section { margin-bottom: 20px; }
-        .task-section h4 { font-size: 14px; color: #666; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .status-group { margin-bottom: 16px; }
+        .status-group h4 { font-size: 13px; color: #666; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid; display: flex; justify-content: space-between; align-items: center; }
+        .status-group h4 .count { font-weight: 600; }
+        
+        .status-completed h4 { border-color: #34a853; color: #34a853; }
+        .status-inwork h4 { border-color: #fbbc04; color: #fbbc04; }
+        .status-pending h4 { border-color: #ea4335; color: #ea4335; }
+        
         .task-list { list-style: none; }
-        .task-list li { padding: 10px 14px; background: #f8f9fa; border-radius: 8px; margin-bottom: 8px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
-        .task-list li .date { font-size: 12px; color: #888; background: #e9ecef; padding: 2px 8px; border-radius: 4px; }
-        .task-list li .deadline { color: #dc3545; }
-        .task-list li .deadline.urgent { background: #fce4e4; }
+        .task-item { padding: 10px 12px; margin-bottom: 6px; background: #fafafa; border-radius: 6px; display: flex; align-items: flex-start; gap: 10px; }
+        .task-item:hover { background: #f0f0f0; }
+        .task-item .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+        .task-item.completed .status-dot { background: #34a853; }
+        .task-item.inwork .status-dot { background: #fbbc04; }
+        .task-item.pending .status-dot { background: #ea4335; }
+        .task-item .task-title { font-size: 13px; color: #333; flex: 1; word-break: break-word; }
+        .task-item .task-id { font-size: 11px; color: #999; flex-shrink: 0; }
         
-        .insights { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 10px; padding: 16px; }
-        .insights h4 { font-size: 14px; margin-bottom: 10px; color: #2e7d32; }
-        .insights ul { list-style: none; }
-        .insights li { font-size: 13px; padding: 4px 0; display: flex; align-items: center; gap: 8px; }
-        .insights li .icon { font-size: 16px; }
+        .hidden { display: none !important; }
         
-        .timeline { margin-top: 20px; }
-        .timeline h4 { font-size: 14px; color: #666; margin-bottom: 12px; }
-        .timeline-track { display: flex; gap: 8px; flex-wrap: wrap; }
-        .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: #28a745; position: relative; }
-        .timeline-dot::after { content: attr(data-date); position: absolute; top: 18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #888; white-space: nowrap; }
-        
-        .leader-badge { position: absolute; top: 10px; right: 10px; background: #ffc107; color: #000; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 4px; }
-        
-        @media (max-width: 1200px) { .hero-grid { grid-template-columns: repeat(3, 1fr); } .director-cards { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { .hero-grid { grid-template-columns: repeat(2, 1fr); } .stats-bar { grid-template-columns: repeat(2, 1fr); } .metrics-grid { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .director-card.expanded { animation: fadeIn 0.3s ease; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏆 РУКОВОДИТЕЛИ VILAVI</h1>
-            <p>Мониторинг эффективности топ-менеджмента | Апрель 2026</p>
-        </header>
-
-        <div class="hero-grid">
-            <div class="director-mini" onclick="toggleCard(0)">
-                <div class="avatar">Д</div>
-                <div class="name">Евгений Древс</div>
-                <div class="dept">IT</div>
-                <div class="stats">
-                    <span class="tasks">17 задач</span>
-                    <span class="rate rate-high">83%</span>
-                </div>
-            </div>
-            <div class="director-mini" onclick="toggleCard(1)">
-                <div class="avatar">К</div>
-                <div class="name">Денис Крицкий</div>
-                <div class="dept">Коммерч.</div>
-                <div class="stats">
-                    <span class="tasks">35 задач</span>
-                    <span class="rate rate-mid">77%</span>
-                </div>
-            </div>
-            <div class="director-mini" onclick="toggleCard(2)">
-                <div class="avatar">М</div>
-                <div class="name">Вячеслав Мельников</div>
-                <div class="dept">Юр.</div>
-                <div class="stats">
-                    <span class="tasks">17 задач</span>
-                    <span class="rate rate-high">82%</span>
-                </div>
-            </div>
-            <div class="director-mini" onclick="toggleCard(3)">
-                <div class="avatar">К</div>
-                <div class="name">Анастасия Колчина</div>
-                <div class="dept">Клиент.</div>
-                <div class="stats">
-                    <span class="tasks">20 задач</span>
-                    <span class="rate rate-mid">70%</span>
-                </div>
-            </div>
-            <div class="director-mini" onclick="toggleCard(4)">
-                <div class="avatar">М</div>
-                <div class="name">Инна Мирная</div>
-                <div class="dept">HR</div>
-                <div class="stats">
-                    <span class="tasks">18 задач</span>
-                    <span class="rate rate-high">89%</span>
-                </div>
-            </div>
-            <div class="director-mini" onclick="toggleCard(5)">
-                <div class="avatar">П</div>
-                <div class="name">Сергей Пронин</div>
-                <div class="dept">Логистика</div>
-                <div class="stats">
-                    <span class="tasks">18 задач</span>
-                    <span class="rate rate-mid">78%</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="stats-bar">
-            <div class="stat-item">
-                <div class="value">125</div>
-                <div class="label">Всего задач</div>
-                <div class="sub">у топ-директоров</div>
-            </div>
-            <div class="stat-item">
-                <div class="value">80%</div>
-                <div class="label">Среднее выполнение</div>
-                <div class="sub">все показатели >70%</div>
-            </div>
-            <div class="stat-item">
-                <div class="value">Денис Крицкий</div>
-                <div class="label">Самый активный</div>
-                <div class="sub">35 задач создано</div>
-            </div>
-            <div class="stat-item">
-                <div class="value">Инна Мирная</div>
-                <div class="label">Лидер дисциплины</div>
-                <div class="sub">89% выполнения</div>
-            </div>
-        </div>
-
-        <h2 class="section-title">📋 Детальные карточки руководителей</h2>
-
-        <div class="director-cards">
-            <!-- Евгений Древс -->
-            <div class="director-card" id="card-0">
-                <div class="director-card-header" onclick="toggleCard(0)">
-                    <div class="top">
-                        <div class="info">
-                            <div class="avatar-lg">Д</div>
-                            <div>
-                                <div class="name-lg">Евгений Древс</div>
-                                <div class="position-lg">Директор IT отдела</div>
-                            </div>
-                        </div>
-                        <span class="badge rate-high">83%</span>
-                    </div>
-                    <div class="stats-row">
-                        <span>📝 Создал: 9 задач</span>
-                        <span>👤 Как исполнитель: 17 задач</span>
-                        <span>⏱️ Среднее: 4.5 дня</span>
-                    </div>
-                    <div style="text-align: right; margin-top: 8px;">
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="metrics-grid">
-                        <div class="metric-box">
-                            <div class="num green">14</div>
-                            <div class="lbl">Закрыто</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num blue">3</div>
-                            <div class="lbl">В работе</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num orange">0</div>
-                            <div class="lbl">Просрочено</div>
-                        </div>
-                    </div>
-                    <div class="task-section">
-                        <h4>✅ Недавно закрытые:</h4>
-                        <ul class="task-list">
-                            <li><span>[05.04] Задача</span><span class="date">ID: 264</span></li>
-                            <li><span>[08.04] Задача</span><span class="date">ID: 6519</span></li>
-                            <li><span>[07.04] Задача</span><span class="date">ID: 6525</span></li>
-                        </ul>
-                    </div>
-                    <div class="task-section">
-                        <h4>📅 В работе:</h4>
-                        <ul class="task-list">
-                            <li><span class="deadline">Приём товара. FRONT</span><span class="date deadline">30.04</span></li>
-                        </ul>
-                    </div>
-                    <div class="insights">
-                        <h4>📌 Выводы:</h4>
-                        <ul>
-                            <li><span class="icon">✓</span> Отличная дисциплина (83%)</li>
-                            <li><span class="icon">✓</span> 100% задач выполнено в срок</li>
-                            <li><span class="icon">⚠</span> 3 задачи в работе - требует контроля</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Денис Крицкий -->
-            <div class="director-card" id="card-1">
-                <div class="director-card-header" onclick="toggleCard(1)">
-                    <div class="top">
-                        <div class="info">
-                            <div class="avatar-lg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">К</div>
-                            <div>
-                                <div class="name-lg">Денис Крицкий</div>
-                                <div class="position-lg">Коммерческий директор</div>
-                            </div>
-                        </div>
-                        <span class="badge rate-mid">77%</span>
-                    </div>
-                    <div class="stats-row">
-                        <span>📝 Создал: 35 задач</span>
-                        <span>👤 Как исполнитель: 35 задач</span>
-                        <span>⏱️ Среднее: 3.2 дня</span>
-                    </div>
-                    <div style="text-align: right; margin-top: 8px;">
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="metrics-grid">
-                        <div class="metric-box">
-                            <div class="num green">27</div>
-                            <div class="lbl">Закрыто</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num blue">5</div>
-                            <div class="lbl">В работе</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num orange">0</div>
-                            <div class="lbl">Просрочено</div>
-                        </div>
-                    </div>
-                    <div class="task-section">
-                        <h4>✅ Недавно закрытые:</h4>
-                        <ul class="task-list">
-                            <li><span>[11.04] Задача</span><span class="date">ID: 407</span></li>
-                            <li><span>[10.04] Задача</span><span class="date">ID: 427</span></li>
-                            <li><span>[09.04] Задача</span><span class="date">ID: 1147</span></li>
-                        </ul>
-                    </div>
-                    <div class="task-section">
-                        <h4>📅 В работе:</h4>
-                        <ul class="task-list">
-                            <li><span class="deadline">Бюджет на Ноябрь 2025</span><span class="date">06.11</span></li>
-                        </ul>
-                    </div>
-                    <div class="insights">
-                        <h4>📌 Выводы:</h4>
-                        <ul>
-                            <li><span class="icon">✓</span> Лидер по созданию задач (35)</li>
-                            <li><span class="icon">✓</span> Высокая скорость выполнения (3.2 дня)</li>
-                            <li><span class="icon">✓</span> 100% в срок</li>
-                            <li><span class="icon">⚠</span> Нагрузка выше среднего</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Вячеслав Мельников -->
-            <div class="director-card" id="card-2">
-                <div class="director-card-header" onclick="toggleCard(2)">
-                    <div class="top">
-                        <div class="info">
-                            <div class="avatar-lg" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">М</div>
-                            <div>
-                                <div class="name-lg">Вячеслав Мельников</div>
-                                <div class="position-lg">Директор по правовым вопросам</div>
-                            </div>
-                        </div>
-                        <span class="badge rate-high">82%</span>
-                    </div>
-                    <div class="stats-row">
-                        <span>📝 Создал: 11 задач</span>
-                        <span>👤 Как исполнитель: 17 задач</span>
-                        <span>⏱️ Среднее: 5.8 дня</span>
-                    </div>
-                    <div style="text-align: right; margin-top: 8px;">
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="metrics-grid">
-                        <div class="metric-box">
-                            <div class="num green">14</div>
-                            <div class="lbl">Закрыто</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num blue">3</div>
-                            <div class="lbl">В работе</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num orange">0</div>
-                            <div class="lbl">Просрочено</div>
-                        </div>
-                    </div>
-                    <div class="task-section">
-                        <h4>✅ Недавно закрытые:</h4>
-                        <ul class="task-list">
-                            <li><span>[11.04] Задача</span><span class="date">ID: 298</span></li>
-                            <li><span>[09.04] Задача</span><span class="date">ID: 5089</span></li>
-                            <li><span>[08.04] Задача</span><span class="date">ID: 6025</span></li>
-                        </ul>
-                    </div>
-                    <div class="task-section">
-                        <h4>📅 В работе:</h4>
-                        <ul class="task-list">
-                            <li><span>Бюджет на Ноябрь 2025. Юридический отдел.</span><span class="date">01.11</span></li>
-                        </ul>
-                    </div>
-                    <div class="insights">
-                        <h4>📌 Выводы:</h4>
-                        <ul>
-                            <li><span class="icon">✓</span> Высокая дисциплина (82%)</li>
-                            <li><span class="icon">✓</span> 100% в срок</li>
-                            <li><span class="icon">⚠</span> Дольше всех выполняет задачи (5.8 дня)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Анастасия Колчина -->
-            <div class="director-card" id="card-3">
-                <div class="director-card-header" onclick="toggleCard(3)">
-                    <div class="top">
-                        <div class="info">
-                            <div class="avatar-lg" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">К</div>
-                            <div>
-                                <div class="name-lg">Анастасия Колчина</div>
-                                <div class="position-lg">Директор по клиентскому сервису</div>
-                            </div>
-                        </div>
-                        <span class="badge rate-mid">70%</span>
-                    </div>
-                    <div class="stats-row">
-                        <span>📝 Создал: 16 задач</span>
-                        <span>👤 Как исполнитель: 20 задач</span>
-                        <span>⏱️ Среднее: 4.1 дня</span>
-                    </div>
-                    <div style="text-align: right; margin-top: 8px;">
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="metrics-grid">
-                        <div class="metric-box">
-                            <div class="num green">14</div>
-                            <div class="lbl">Закрыто</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num blue">4</div>
-                            <div class="lbl">В работе</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num orange">0</div>
-                            <div class="lbl">Просрочено</div>
-                        </div>
-                    </div>
-                    <div class="task-section">
-                        <h4>✅ Недавно закрытые:</h4>
-                        <ul class="task-list">
-                            <li><span>[12.04] Задача</span><span class="date">ID: 1077</span></li>
-                            <li><span>[11.04] Задача</span><span class="date">ID: 2957</span></li>
-                            <li><span>[10.04] Задача</span><span class="date">ID: 10045</span></li>
-                        </ul>
-                    </div>
-                    <div class="task-section">
-                        <h4>📅 В работе:</h4>
-                        <ul class="task-list">
-                            <li><span>Бюджет на Ноябрь 2025. Клиентский отдел.</span><span class="date">29.10</span></li>
-                        </ul>
-                    </div>
-                    <div class="insights">
-                        <h4>📌 Выводы:</h4>
-                        <ul>
-                            <li><span class="icon">⚠</span> Дисциплина ниже среднего (70%)</li>
-                            <li><span class="icon">✓</span> Нет просроченных задач</li>
-                            <li><span class="icon">⚠</span> Требует внимания</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Инна Мирная -->
-            <div class="director-card" id="card-4">
-                <div class="director-card-header" onclick="toggleCard(4)">
-                    <div class="top">
-                        <div class="info">
-                            <div class="avatar-lg" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">М</div>
-                            <div>
-                                <div class="name-lg">Инна Мирная</div>
-                                <div class="position-lg">Директор по персоналу</div>
-                            </div>
-                        </div>
-                        <span class="badge rate-high">89%</span>
-                    </div>
-                    <div class="stats-row">
-                        <span>📝 Создал: 14 задач</span>
-                        <span>👤 Как исполнитель: 18 задач</span>
-                        <span>⏱️ Среднее: 2.8 дня</span>
-                    </div>
-                    <div style="text-align: right; margin-top: 8px;">
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="metrics-grid">
-                        <div class="metric-box">
-                            <div class="num green">16</div>
-                            <div class="lbl">Закрыто</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num blue">2</div>
-                            <div class="lbl">В работе</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num orange">0</div>
-                            <div class="lbl">Просрочено</div>
-                        </div>
-                    </div>
-                    <div class="task-section">
-                        <h4>✅ Недавно закрытые:</h4>
-                        <ul class="task-list">
-                            <li><span>[12.04] Задача</span><span class="date">ID: 256</span></li>
-                            <li><span>[11.04] Задача</span><span class="date">ID: 6517</span></li>
-                            <li><span>[10.04] Задача</span><span class="date">ID: 7993</span></li>
-                        </ul>
-                    </div>
-                    <div class="task-section">
-                        <h4>📅 В работе:</h4>
-                        <ul class="task-list">
-                            <li><span>Бюджет на Ноябрь 2025. HR</span><span class="date">28.10</span></li>
-                        </ul>
-                    </div>
-                    <div class="insights" style="background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);">
-                        <h4>📌 Выводы:</h4>
-                        <ul>
-                            <li><span class="icon">✓</span> Лучшая дисциплина (89%)</li>
-                            <li><span class="icon">✓</span> Самая быстрая (2.8 дня)</li>
-                            <li><span class="icon">✓</span> Образец эффективности</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Сергей Пронин -->
-            <div class="director-card" id="card-5">
-                <div class="director-card-header" onclick="toggleCard(5)">
-                    <div class="top">
-                        <div class="info">
-                            <div class="avatar-lg" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #333;">П</div>
-                            <div>
-                                <div class="name-lg">Сергей Пронин</div>
-                                <div class="position-lg">Операционный директор</div>
-                            </div>
-                        </div>
-                        <span class="badge rate-mid">78%</span>
-                    </div>
-                    <div class="stats-row">
-                        <span>📝 Создал: 20 задач</span>
-                        <span>👤 Как исполнитель: 18 задач</span>
-                        <span>⏱️ Среднее: 3.5 дня</span>
-                    </div>
-                    <div style="text-align: right; margin-top: 8px;">
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="metrics-grid">
-                        <div class="metric-box">
-                            <div class="num green">14</div>
-                            <div class="lbl">Закрыто</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num blue">3</div>
-                            <div class="lbl">В работе</div>
-                        </div>
-                        <div class="metric-box">
-                            <div class="num orange">0</div>
-                            <div class="lbl">Просрочено</div>
-                        </div>
-                    </div>
-                    <div class="task-section">
-                        <h4>✅ Недавно закрытые:</h4>
-                        <ul class="task-list">
-                            <li><span>[12.04] Задача</span><span class="date">ID: 2993</span></li>
-                            <li><span>[11.04] Задача</span><span class="date">ID: 3299</span></li>
-                            <li><span>[10.04] Задача</span><span class="date">ID: 4057</span></li>
-                        </ul>
-                    </div>
-                    <div class="task-section">
-                        <h4>📅 В работе:</h4>
-                        <ul class="task-list">
-                            <li><span>Учёт сроков изготовления товара</span><span class="date">03.04</span></li>
-                        </ul>
-                    </div>
-                    <div class="insights">
-                        <h4>📌 Выводы:</h4>
-                        <ul>
-                            <li><span class="icon">✓</span> Хорошая дисциплина (78%)</li>
-                            <li><span class="icon">✓</span> Высокая скорость (3.5 дня)</li>
-                            <li><span class="icon">✓</span> 100% в срок</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <h1>Дашборд задач директоров</h1>
+    
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Поиск по названию задачи...">
     </div>
-
+    
+    <div class="hero-grid" id="heroGrid"></div>
+    
+    <div class="detail-section" id="detailSection"></div>
+    
     <script>
-        function toggleCard(index) {
-            const card = document.getElementById('card-' + index);
-            card.classList.toggle('collapsed');
+    const data = {
+        "IT": {
+            "director": "Евгений Древс",
+            "tasks": [
+                {"id": "264", "title": "Согласовать договор РТКЛАУД", "status": "5"},
+                {"id": "375", "title": "Составить инструкции по обработке заявок на вывод бонусов", "status": "3"},
+                {"id": "947", "title": "KPI отдела ИТ", "status": "2"},
+                {"id": "4619", "title": "Холодно в IT-\"крыле\" офиса", "status": "5"},
+                {"id": "5705", "title": "Выгрузка с марта 2016 года", "status": "5"},
+                {"id": "6517", "title": "Пенсия и прочие начисления и выплаты при работе из РФ на компанию в Казахстане", "status": "6"},
+                {"id": "6519", "title": "Общий список вопросов", "status": "6"},
+                {"id": "6525", "title": "Бухгалтерия", "status": "6"},
+                {"id": "9039", "title": "VILAVI AI 4.0", "status": "2"},
+                {"id": "58", "title": "Бюджет на Ноябрь 2025. IT.", "status": "5"},
+                {"id": "166", "title": "Прием товара. FRONT", "status": "5"},
+                {"id": "256", "title": "Установить 1С , создать клиента", "status": "5"},
+                {"id": "431", "title": "Подготовка к Стратегической сессии Vilavi 2.0", "status": "5"},
+                {"id": "1733", "title": "Корректировка ID 286624", "status": "5"},
+                {"id": "2343", "title": "ГПХ Гнатюк А.Н.", "status": "5"},
+                {"id": "2635", "title": "Бюджет на Декабрь 2025. IT.", "status": "5"},
+                {"id": "3835", "title": "Бюджет на Январь 2026. IT.", "status": "5"},
+                {"id": "4055", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "6489", "title": "Изменения в МП по заказам клиента", "status": "5"},
+                {"id": "7507", "title": "Бюджет на Март 2026. IT.", "status": "5"},
+                {"id": "8989", "title": "Бюджет на Апрель 2026. IT.", "status": "5"},
+                {"id": "10447", "title": "[ФРЗ] Реализо��ать поиск и выдачу заказа по qr в warehouse", "status": "2"},
+                {"id": "10679", "title": "Подготовить досудебную претензию по договору ИИ-Бот", "status": "3"},
+                {"id": "11003", "title": "Серверная лицензия 1С", "status": "2"}
+            ]
+        },
+        "Коммерческий": {
+            "director": "Денис Крицкий",
+            "tasks": [
+                {"id": "164", "title": "Беларусь: дополнительный расчет количества заказов", "status": "5"},
+                {"id": "284", "title": "Узбекистан: тема выступления форуме от Киселевой А.А. 29.10.2025", "status": "6"},
+                {"id": "333", "title": "Узбекистан: согласование бюджета на спикера на форум 29-30.11.2025.", "status": "6"},
+                {"id": "335", "title": "Беларусь: получение обновленного КП от Filuet", "status": "5"},
+                {"id": "407", "title": "Армения: доставка поставки от таможенного склада до получателя Oct`25", "status": "5"},
+                {"id": "501", "title": "Армения: необходимость маркировки товаров для рынка", "status": "5"},
+                {"id": "547", "title": "Турция: согласование графика оплат первой поставки в адрес С. Генча.", "status": "5"},
+                {"id": "659", "title": "Офис: звукоизоляция переговорной HR", "status": "5"},
+                {"id": "675", "title": "Кыргыстан: регламент взаимодействия", "status": "6"},
+                {"id": "707", "title": "Беларусь: выдача дегустационного продукта ноябрь-декабрь 2025", "status": "5"},
+                {"id": "1027", "title": "Армения: маркировка товаров", "status": "5"},
+                {"id": "1147", "title": "Армения: частичная компенсация участия в форуме", "status": "5"},
+                {"id": "1289", "title": "Беларусь: запуск сайта с экварингом - третий вариант (полный)", "status": "2"},
+                {"id": "1445", "title": "КОММЕРЧЕСКАЯ ФУНКЦИЯ: структура", "status": "2"},
+                {"id": "1447", "title": "КОММЕРЧЕСКАЯ ФУНКЦИЯ: мотивация руководителя", "status": "5"},
+                {"id": "1449", "title": "Отчет по командировке, Москва, 07.11.2025", "status": "5"},
+                {"id": "1505", "title": "КОММЕРЧЕСКАЯ ФУНКЦИЯ: приказ о назначении", "status": "5"},
+                {"id": "1549", "title": "(IT) Запуск MVP региона Белоруссия — первый вариант", "status": "5"},
+                {"id": "1657", "title": "Армения: GTIN-маркировка", "status": "5"},
+                {"id": "1663", "title": "БЗ Подписка (Предзаказ)", "status": "3"},
+                {"id": "1677", "title": "Турция: договор поставки товаров", "status": "2"},
+                {"id": "2005", "title": "Армения: передача-прием оригиналов документов от Персоян Инны", "status": "5"},
+                {"id": "2073", "title": "Аналитика структуры сети 11.2026", "status": "5"},
+                {"id": "2733", "title": "КОММЕРЧЕСКАЯ ФУНКЦИЯ: подбор BDM", "status": "5"},
+                {"id": "2737", "title": "Беларусь: покупка сотового номера для регистрации домена", "status": "5"},
+                {"id": "3139", "title": "(GBM) Сбор информации, анализ и утверждение требований к сайту", "status": "2"},
+                {"id": "3259", "title": "Этикетки для Европы: наполнение", "status": "5"},
+                {"id": "3261", "title": "Этикетки для Европы: форма + дизайн", "status": "5"},
+                {"id": "3407", "title": "МАРКЕТПЛЕЙСЫ: предложения от Кольцова", "status": "5"},
+                {"id": "3433", "title": "Адаптации маркетинг плана для сети", "status": "5"},
+                {"id": "3715", "title": "Журавлева: ответ по Польше", "status": "5"},
+                {"id": "3717", "title": "Древс: данные для Колчиной по невыгруженным заказам из 1С", "status": "5"},
+                {"id": "3719", "title": "Древс: переговоры с сотрудниками по переходу в саппорт на 2/2", "status": "5"},
+                {"id": "3721", "title": "ФРЗ: подготовить вариант выплат для согласования с ДПЛ", "status": "5"},
+                {"id": "3725", "title": "Мельников: ответ от Усольцевой по принятию претензий от потребителей", "status": "5"},
+                {"id": "3729", "title": "Кокряцкая: акция по старому Mobio, срок", "status": "5"},
+                {"id": "4045", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4047", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4049", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4051", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4053", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4055", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4057", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4059", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4061", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4263", "title": "МАРКЕТПЛЕЙСЫ: предложения от Никитина", "status": "5"},
+                {"id": "4411", "title": "Согласование и подписание договора по проекту \"Не рискуй. Проверь!\"", "status": "5"},
+                {"id": "4579", "title": "Повышение цен на купоны (билетов)VG", "status": "2"},
+                {"id": "7233", "title": "Статистика по отправке поставок на ФРЗ Польша", "status": "5"},
+                {"id": "7367", "title": "ИП Молотова (AI-анимационный сериал)", "status": "2"},
+                {"id": "427", "title": "Подготовка к Стратегической сессии Vilavi 2.0", "status": "5"},
+                {"id": "947", "title": "KPI отдела ИТ", "status": "2"},
+                {"id": "1571", "title": "Списание товара со склада Узбекистана", "status": "5"},
+                {"id": "4033", "title": "Дорожная карта Страт сессия 30.10-01.11.25", "status": "5"},
+                {"id": "5293", "title": "Денису Крицкому от Садыковой Гузаль", "status": "5"},
+                {"id": "6529", "title": "Конференция LONGEVITY CODE. Согласование посещения", "status": "2"},
+                {"id": "6699", "title": "Подключение ЮKassa к сайту РФ для оплаты заказов со стран СНГ и Белоруссии.", "status": "5"},
+                {"id": "7275", "title": "[Оплата] ЮКасса подключение к Белоруссии (регион РФ) - первый этап (вариант №1)", "status": "5"},
+                {"id": "7487", "title": "Бюджет на Март 2026. Маркетинг", "status": "5"},
+                {"id": "7599", "title": "Предложение о сотрудничестве", "status": "5"},
+                {"id": "8983", "title": "Бюджет на Апрель 2026. Маркетинг", "status": "5"},
+                {"id": "9209", "title": "Первичная переработка структуры презентации", "status": "3"},
+                {"id": "9481", "title": "Описание механики процесса начисления бонусов (не выданные заказы)", "status": "2"},
+                {"id": "10203", "title": "KPI маркетинг на апрель 2026", "status": "2"},
+                {"id": "10227", "title": "[Заказ] Продажа ЧЗ набора Mito Base для ЮЛ только с ОС", "status": "5"},
+                {"id": "10351", "title": "[Беларусь] Принять решение по варианту внедрения изменений для Белоруссии", "status": "5"}
+            ]
+        },
+        "Юридический": {
+            "director": "Вячеслав Мельников",
+            "tasks": [
+                {"id": "298", "title": "(IT) Этапы внедрения роли КИК", "status": "5"},
+                {"id": "399", "title": "(ИМ 2.0) Проверка сайта 2.0 - разные домены", "status": "2"},
+                {"id": "3321", "title": "(V) Убрать все переходы в интернет - магазин с сайта vilavi.com", "status": "2"},
+                {"id": "5089", "title": "Документы для магазина KZ последняя редакция", "status": "5"},
+                {"id": "6003", "title": "(М) Регистрация социальных сетей на все ЮЛ - РФ, КЗ, УЗ, Европа + Беларусь", "status": "2"},
+                {"id": "6025", "title": "Претензия по  AI консьержу", "status": "5"},
+                {"id": "6047", "title": "Сбор согласий обработки и хранения куки на сайте", "status": "2"},
+                {"id": "7549", "title": "Обработка кулеров воды и замена фильтров.", "status": "5"},
+                {"id": "8135", "title": "Регистрация Европейского номера телефона", "status": "2"},
+                {"id": "9269", "title": "[Перс.данные] Сбор согласий временно уносим только на этап оформления заказа - простой вариант", "status": "2"},
+                {"id": "9829", "title": "Выплата бонусов (добавление кодов оквэд)", "status": "3"},
+                {"id": "62", "title": "Бюджет на Ноябрь 2025. Юридический отдел.", "status": "5"},
+                {"id": "264", "title": "Согласовать договор РТКЛАУД", "status": "5"},
+                {"id": "272", "title": "ИП Слащева  - ВИЛАВИ", "status": "5"},
+                {"id": "325", "title": "ИВАДЖО - VLV KZ", "status": "5"},
+                {"id": "327", "title": "Артлайф-Вилави", "status": "5"},
+                {"id": "379", "title": "Росхимия  - ВИЛАВИ", "status": "5"},
+                {"id": "395", "title": "Проверка текста на возможность публикации", "status": "5"},
+                {"id": "417", "title": "Подготовка к Стратегической сессии Vilavi 2.0", "status": "2"},
+                {"id": "501", "title": "Армения: необходимость маркировки товаров для рынка", "status": "5"},
+                {"id": "529", "title": "Подключение google pay и apple pay в эквайринге tiptop.", "status": "5"},
+                {"id": "533", "title": "БЕРНС  - ВИЛАВИ", "status": "5"},
+                {"id": "641", "title": "МедБазис - ВИЛАВИ", "status": "5"},
+                {"id": "739", "title": "ФУДМИ ЛАБ (новоленд) - ВИЛАВИ", "status": "5"},
+                {"id": "969", "title": "Поиск альтернативных/дополнительных мер воздействия на селлеров", "status": "5"},
+                {"id": "1067", "title": "Армения: допсоглашение на изменение срока оплаты", "status": "5"},
+                {"id": "1081", "title": "Договор Борисенко Вилави", "status": "2"},
+                {"id": "1241", "title": "Удаление контракта Клиента", "status": "5"},
+                {"id": "1557", "title": "регистрация товарных знаков в Казахстане", "status": "3"},
+                {"id": "1563", "title": "Продление регистрации товарных знаков", "status": "5"},
+                {"id": "1671", "title": "(LD) Согласование коротких наименований для карточке в ИМ 2.0", "status": "5"},
+                {"id": "1677", "title": "Турция: договор поставки товаров", "status": "2"},
+                {"id": "2223", "title": "Согласование договора Вилави-Сибирский центр переводов", "status": "5"},
+                {"id": "2447", "title": "макет штрих-кода BRAIN COFFEE", "status": "5"},
+                {"id": "2713", "title": "Запрос на передачу акций умершего партнера", "status": "5"},
+                {"id": "3023", "title": "Планируе�� ли компания VILAVI договариваться с властями РФ, чтобы сайт компании был в белом списке интернета", "status": "5"},
+                {"id": "3407", "title": "МАРКЕТПЛЕЙСЫ: предложения от Кольцова", "status": "5"},
+                {"id": "3443", "title": "Затраты юридических лиц, которых необходимо перенести на Вилави", "status": "5"},
+                {"id": "3635", "title": "Согласование стика саше_Teo Green", "status": "5"},
+                {"id": "3975", "title": "Согласование заявки к договору ИП Леушина", "status": "5"},
+                {"id": "3977", "title": "Согласование заявки к договору ИП Леушина", "status": "5"},
+                {"id": "4047", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4263", "title": "МАРКЕТПЛЕЙСЫ: предложения от Никитина", "status": "5"},
+                {"id": "5029", "title": "Информация от ID 873307 Ивановой Натальи Альбертовны", "status": "5"},
+                {"id": "5229", "title": "Информация от Натальи Ивановой для проработки вопроса по выводам бонусов представителями Армении. проработки вопроса по выводам бонусов представителями Армении.", "status": "5"},
+                {"id": "5963", "title": "Досудебная претензия", "status": "5"},
+                {"id": "5967", "title": "Претензия о появление мышей в офисе", "status": "5"},
+                {"id": "6119", "title": "Доверенность Вилави на Пронину закончилась 31.12.25", "status": "5"},
+                {"id": "6647", "title": "Договор ГПХ", "status": "5"},
+                {"id": "7001", "title": "Запрос по 115-ФЗ ID 873307 Иванова Наталья Альбертовна", "status": "5"},
+                {"id": "7171", "title": "\"Наказать\" Альфа-банк за 1 февраля.", "status": "3"},
+                {"id": "7841", "title": "Работа с юридическими лицами из Абхазии.", "status": "5"},
+                {"id": "8535", "title": "Описание товаров в европейском ИМ", "status": "2"},
+                {"id": "8573", "title": "Товарный знак. Наклейки на машинах: штраф или нет?", "status": "5"},
+                {"id": "8785", "title": "Запрос от партнера ID 357902 Schurov Maksim Aleksandrovich о регистрации продуктов в систем GIS", "status": "5"},
+                {"id": "8893", "title": "Текст роллапа не нарушает закон о рекламе?", "status": "5"},
+                {"id": "9171", "title": "Согласование дизайна Mitomatrix", "status": "5"},
+                {"id": "9191", "title": "Актуализация сертификатов, СГР", "status": "2"},
+                {"id": "9249", "title": "Вопрос по размещению компании  в сервисе 2 ГИС", "status": "5"}
+            ]
+        },
+        "Клиентский": {
+            "director": "Анастасия Колчина",
+            "tasks": [
+                {"id": "999", "title": "Клиентский сервис изменения ЗП и KPI", "status": "2"},
+                {"id": "1077", "title": "(AM) Партнерам не приходит СМС с кодом", "status": "5"},
+                {"id": "2957", "title": "Выдать доступы для сотрудника КС Марии Гуньбиной", "status": "5"},
+                {"id": "3179", "title": "(ИМ 2.0) Собрать вопросы для блока FAQ (вопросы - ответы)", "status": "2"},
+                {"id": "4091", "title": "Переклеить номер телефона на упаковке О Тест", "status": "5"},
+                {"id": "4935", "title": "Собрать системный блок, для Марии Гуньбиной", "status": "5"},
+                {"id": "5045", "title": "Произвести списание продуктов в Ереване", "status": "5"},
+                {"id": "5081", "title": "(IT) Ошибки или проблемы на сайте ИМ 2.0", "status": "5"},
+                {"id": "7287", "title": "[Франшизы] Доработать отображения вознаграждений у ФРЗ - Европа", "status": "2"},
+                {"id": "8835", "title": "Подключение Sellmonitor", "status": "5"},
+                {"id": "9055", "title": "заявление на возврат средств", "status": "5"},
+                {"id": "9351", "title": "Направить жалобу на Каспий", "status": "3"},
+                {"id": "9567", "title": "Передача данных в AmoCRM по API", "status": "5"},
+                {"id": "10045", "title": "Анализ диалогов КС 2025", "status": "5"},
+                {"id": "10951", "title": "Возобновление работы канала WA для региона Казахстан", "status": "2"},
+                {"id": "60", "title": "Бюджет на Ноябрь 2025. Клиентский отдел.", "status": "5"},
+                {"id": "433", "title": "Подготовка к Стратегической сессии Vilavi 2.0", "status": "5"},
+                {"id": "2637", "title": "Бюджет на Декабрь 2025. Клиентский отдел.", "status": "5"},
+                {"id": "3113", "title": "СДЭК Казахстан коммуникация", "status": "2"},
+                {"id": "3847", "title": "Бюджет на Январь 2026. Клиентский отдел.", "status": "5"},
+                {"id": "4053", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "5777", "title": "Бюджет на Февраль 2026. Клиентский отдел.", "status": "5"},
+                {"id": "7119", "title": "Прогноз продаж Регион Европа на 2026 год", "status": "5"},
+                {"id": "7499", "title": "Бюджет на Март 2026. Клиентский отдел.", "status": "5"},
+                {"id": "7753", "title": "Заказ 101263804", "status": "5"},
+                {"id": "8979", "title": "Бюджет на Апрель 2026. Клиентский отдел.", "status": "5"},
+                {"id": "9085", "title": "Проанализировать задачи по настройки AmoCRM", "status": "2"},
+                {"id": "9623", "title": "Автоматизация ответов КС", "status": "2"},
+                {"id": "9829", "title": "Выплата бонусов (добавление кодов оквэд)", "status": "3"},
+                {"id": "10745", "title": "КС_АПРЕЛЬ_АКЦИЯ ВЫХОДНОГО ДНЯ", "status": "3"}
+            ]
+        },
+        "HR": {
+            "director": "Инна Мирная",
+            "tasks": [
+                {"id": "256", "title": "Установить 1С , создать клиента", "status": "5"},
+                {"id": "1113", "title": "Прием, увольнение, KPI службы персонала", "status": "2"},
+                {"id": "3331", "title": "IT. Инфраструктура - Создание учетной записи и установка компьютера", "status": "5"},
+                {"id": "3333", "title": "IT. Инфраструктура - Создание учетной записи и установка компьютера", "status": "5"},
+                {"id": "3975", "title": "Согласование заявки к договору ИП Леушина", "status": "5"},
+                {"id": "3977", "title": "Согласование заявки к договору ИП Леушина", "status": "5"},
+                {"id": "4473", "title": "Открыть доступ (ограниченный) сотрудникам HR", "status": "5"},
+                {"id": "7993", "title": "Подарки к 23.02 и 08.03.", "status": "5"},
+                {"id": "7995", "title": "Подарки к 23.02 и 08.03.", "status": "5"},
+                {"id": "7997", "title": "Подарки к 23.02 и 08.03.", "status": "5"},
+                {"id": "8503", "title": "договор на обучение публичным выступлениям", "status": "5"},
+                {"id": "9771", "title": "Обучение по работе со Штатным расписанием в 1С КА, ЗУП", "status": "5"},
+                {"id": "10451", "title": "перенос данных в комплексную 1С", "status": "5"},
+                {"id": "78", "title": "Бюджет на Ноябрь 2025. HR", "status": "5"},
+                {"id": "429", "title": "Подготовка к Стратегической сессии Vilavi 2.0", "status": "5"},
+                {"id": "2645", "title": "Бюджет на Декабрь 2025. HR", "status": "5"},
+                {"id": "2993", "title": "Издание приказа о времени работы офиса ДК77", "status": "5"},
+                {"id": "3299", "title": "Создание и реализация чек-листа планово-предупредительных работ на складах компании", "status": "5"},
+                {"id": "3841", "title": "Бюджет на Январь 2026. HR", "status": "5"},
+                {"id": "4057", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4447", "title": "Подбор кладовщика (Кусково)", "status": "5"},
+                {"id": "5197", "title": "Анализ средней заработной платы для сотрудников", "status": "5"},
+                {"id": "5545", "title": "Заявка на подборку сотрудника в отдел логистики", "status": "5"},
+                {"id": "5619", "title": "Подбор руководителя смены с функцией кладовщика ( Астана )", "status": "5"},
+                {"id": "5771", "title": "Бюджет на Февраль 2026. HR", "status": "5"},
+                {"id": "6517", "title": "Пенсия и прочие начисления и выплаты при работе из РФ на компанию в Казахстане", "status": "6"},
+                {"id": "7309", "title": "Подбор кладовщика ( Кусково)", "status": "5"},
+                {"id": "7497", "title": "Бюджет на Март 2026. HR", "status": "5"},
+                {"id": "8987", "title": "Бюджет на Апрель 2026. HR", "status": "5"},
+                {"id": "9945", "title": "подбор бухгалтера по налогам", "status": "2"}
+            ]
+        },
+        "Логистика": {
+            "director": "Сергей Пронин",
+            "tasks": [
+                {"id": "513", "title": "[ФРЗ] Предзаказ на франшизном складе (вариант ТЗ №2)", "status": "2"},
+                {"id": "935", "title": "Отчет по ВГХ для складов фрзи и не только", "status": "5"},
+                {"id": "945", "title": "Прием и увольнение сотрудников, согласование з/п и премий", "status": "2"},
+                {"id": "1715", "title": "(LOG) Запуск региона Белоруссия - франшизы, основной склад, маркировка, доставка", "status": "5"},
+                {"id": "1723", "title": "Договор на поставку и монтаж СКУД и видео наблюдения в офисе", "status": "5"},
+                {"id": "1959", "title": "Охрана офиса и склада Подразделение Д", "status": "5"},
+                {"id": "2071", "title": "Договор на монтаж охранной сигнализации", "status": "5"},
+                {"id": "2515", "title": "Обследование помещений для установк�� сигнализации", "status": "5"},
+                {"id": "2601", "title": "Проверка фактически выданных заказов ЛК-1с", "status": "5"},
+                {"id": "2653", "title": "Согласование доп соглашения по монтажу сигнализации на ДК.77", "status": "5"},
+                {"id": "2655", "title": "Согласование доп соглашения по монтажу сигнализации на ДК.77", "status": "5"},
+                {"id": "2981", "title": "Разработка и согласование положения о закупках компании", "status": "2"},
+                {"id": "2993", "title": "Издание приказа о времени работы офиса ДК77", "status": "5"},
+                {"id": "3299", "title": "Создание и реализация чек-листа планово-предупредительных работ на складах компании", "status": "5"},
+                {"id": "3575", "title": "модернизация отчета", "status": "5"},
+                {"id": "3749", "title": "Регистрация товаров в КЗ с января 2026", "status": "5"},
+                {"id": "3811", "title": "Изменение статусов заказов ФРЗИ с начала года", "status": "5"},
+                {"id": "4989", "title": "корректировка отчета", "status": "5"},
+                {"id": "5173", "title": "Передача статусов заказа на сайт в лк и клиенту", "status": "5"},
+                {"id": "5175", "title": "Улучшение сервиса доставки (по стратсессии)", "status": "5"},
+                {"id": "5587", "title": "Запуск 5 Post", "status": "2"},
+                {"id": "5597", "title": "Упаковка отправок в Европе", "status": "5"},
+                {"id": "6091", "title": "Доработка отчета OneTime", "status": "5"},
+                {"id": "6139", "title": "Ограничение отправок из Болгарии и 3 евро", "status": "5"},
+                {"id": "6245", "title": "Мито база с продуктами чз", "status": "5"},
+                {"id": "6499", "title": "Альтернатива коробке для отправки розничных заказов", "status": "5"},
+                {"id": "6697", "title": "Розничные отправки в Армению", "status": "5"},
+                {"id": "6811", "title": "Как работает в 1С склад Узбекистан", "status": "5"},
+                {"id": "7217", "title": "Быстрая продажа товаров с подходящими сроками годности и некондиционной упаковкой", "status": "5"},
+                {"id": "7389", "title": "Механизмы инвентаризации и контроля остатков", "status": "5"},
+                {"id": "7551", "title": "Регистрация оставшихся товаров в КЗ", "status": "2"},
+                {"id": "8085", "title": "Проверить возможность товаров в пути", "status": "5"},
+                {"id": "8087", "title": "Согласование договора на корп обслуживание командировок", "status": "5"},
+                {"id": "8175", "title": "Проверка работы безордерной схемы на старой базе в тесте", "status": "5"},
+                {"id": "8179", "title": "[Доставка] Актуализация документов по доставке - все регионы", "status": "5"},
+                {"id": "8265", "title": "[Доставка] Как изменить тарифы на доставку из Болгарии", "status": "5"},
+                {"id": "8345", "title": "Сверка остатков давальческого у контрагентов", "status": "5"},
+                {"id": "8377", "title": "Смена охраны на складе МСК в Кусково", "status": "5"},
+                {"id": "8459", "title": "Разработать отчет по выработке сотрудников (по аналогии с одноименным документом)", "status": "5"},
+                {"id": "8461", "title": "Проверка установки скидок дхл из Болгарии", "status": "5"},
+                {"id": "8509", "title": "[Доставка] Подключение конвертации для доставки из РФ в Беларусь - CDEK (второй вариант)", "status": "2"},
+                {"id": "8637", "title": "Настройка списания упаковки в 1С", "status": "2"},
+                {"id": "8665", "title": "Начало тестирования WH для Казахстана", "status": "5"},
+                {"id": "8699", "title": "Командировка в Москву", "status": "5"},
+                {"id": "8701", "title": "Командировка в Москву", "status": "5"},
+                {"id": "8839", "title": "Подписание доп соглашения со Спиди через Евротраст", "status": "5"},
+                {"id": "8949", "title": "Смена охраны в Кусково", "status": "5"},
+                {"id": "9023", "title": "[Доставка] Изменение акции бесплатная доставка в РФ", "status": "2"},
+                {"id": "9037", "title": "[Доставка] Интеграция с DHL ЕВРОПА", "status": "2"},
+                {"id": "9095", "title": "[ФРЗ] Ограничить отображение товаров (доступность) только ФРЗ - Польша, Германия, Италия", "status": "5"},
+                {"id": "437", "title": "Подготовка к Стратегической сессии Vilavi 2.0", "status": "5"},
+                {"id": "2963", "title": "Разбор движения в разрезе юр.лиц/складов", "status": "5"},
+                {"id": "4059", "title": "Дорожная карта по стратсессии на 2026 год", "status": "5"},
+                {"id": "4283", "title": "Прошу предоставить код доступа к охранной сигнализации", "status": "5"},
+                {"id": "4801", "title": "Информация от ID 873307 Ивановой Натальи Альбертовны", "status": "5"},
+                {"id": "5055", "title": "ИН_Прием товара от поставщика", "status": "5"},
+                {"id": "5841", "title": "[Доставка] Изменить ТК Omniva на SmartPosti - ФРЗ Латвия", "status": "5"},
+                {"id": "7955", "title": "[Доставка] Рассмотреть вариант доставки из Германий в Прибалтику", "status": "5"},
+                {"id": "8203", "title": "Помятая упаковка: потерян презентабельный вид", "status": "5"},
+                {"id": "8365", "title": "Брак Франшиза Абай 289972", "status": "5"},
+                {"id": "8471", "title": "Брак Франшиза Алматы 610384", "status": "5"},
+                {"id": "8473", "title": "Брак Франшиза Актау 801995", "status": "5"},
+                {"id": "8545", "title": "Брак Франшиза Калининград  367575", "status": "5"},
+                {"id": "8647", "title": "Запрос информации: экологические обязательства по упаковке (система BDO в Польше) при оформлении заказов на конечного клиента", "status": "5"},
+                {"id": "8769", "title": "Недостача Франшиза Ялта 179610", "status": "5"},
+                {"id": "8879", "title": "Списание склада брака Алматы 610384 Туманова Асель", "status": "5"},
+                {"id": "8925", "title": "Брак Франшиза Польша 740680", "status": "5"},
+                {"id": "8981", "title": "Бюджет на Апрель 2026. Логистика.", "status": "5"},
+                {"id": "9151", "title": "Брак Франшиза Италия 825098", "status": "5"},
+                {"id": "9229", "title": "Недостача Франшиза Ялта 179610", "status": "5"},
+                {"id": "9285", "title": "По логистике: общие вводные и результаты", "status": "3"},
+                {"id": "9289", "title": "Перенос действующих складов, остатков на них на 01.01.2026", "status": "5"},
+                {"id": "9331", "title": "Брак Франшиза Калининград 700476", "status": "5"},
+                {"id": "9333", "title": "Перенос пользователей по фамилиям отдела логистики по максимальным правам, потом отредактируем", "status": "5"},
+                {"id": "9335", "title": "Задачи на обмен и отчеты УТЗ", "status": "2"},
+                {"id": "10273", "title": "[Доставка] Доставка в Беларусь", "status": "5"},
+                {"id": "10301", "title": "Переезд склада в МСК", "status": "3"},
+                {"id": "10337", "title": "[Товар] Покупка и доступность Митобазы на всех складах и пвз", "status": "5"},
+                {"id": "10339", "title": "Инвентаризация остатков (в том числе по франшизам)", "status": "2"}
+            ]
         }
+    };
+    
+    const deptNames = {
+        "IT": "IT",
+        "Коммерческий": "Коммерческий",
+        "Юридический": "Юридический",
+        "Клиентский": "Клиентский",
+        "HR": "HR",
+        "Логистика": "Логистика"
+    };
+    
+    const statusLabels = {
+        "5": "Завершена",
+        "6": "Подтверждена",
+        "2": "Pending",
+        "3": "В работе"
+    };
+    
+    function getStatusClass(status) {
+        if (status === "5" || status === "6") return "completed";
+        if (status === "3") return "inwork";
+        return "pending";
+    }
+    
+    function countByStatus(tasks, status) {
+        return tasks.filter(t => t.status === status).length;
+    }
+    
+    function renderHeroCards() {
+        const grid = document.getElementById('heroGrid');
+        grid.innerHTML = '';
+        
+        Object.keys(data).forEach(dept => {
+            const d = data[dept];
+            const card = document.createElement('div');
+            card.className = 'hero-card';
+            card.onclick = () => scrollToDirector(dept);
+            card.innerHTML = `
+                <div class="name">${d.director}</div>
+                <div class="dept">${deptNames[dept]}</div>
+                <div class="count">${d.tasks.length}</div>
+                <div class="count-label">задач</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+    
+    function scrollToDirector(dept) {
+        const el = document.getElementById('director-' + dept);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+            el.classList.add('expanded');
+        }
+    }
+    
+    function renderDetailCards() {
+        const section = document.getElementById('detailSection');
+        section.innerHTML = '';
+        
+        Object.keys(data).forEach(dept => {
+            const d = data[dept];
+            const tasks = d.tasks;
+            
+            const completed = tasks.filter(t => t.status === "5" || t.status === "6");
+            const inwork = tasks.filter(t => t.status === "3");
+            const pending = tasks.filter(t => t.status === "2");
+            
+            const card = document.createElement('div');
+            card.className = 'director-card';
+            card.id = 'director-' + dept;
+            
+            let tasksHtml = '';
+            
+            if (completed.length) {
+                tasksHtml += `
+                    <div class="status-group status-completed">
+                        <h4>Завершённые <span class="count">${completed.length}</span></h4>
+                        <ul class="task-list">
+                            ${completed.map(t => `
+                                <li class="task-item completed" data-search="${t.title.toLowerCase()}">
+                                    <span class="status-dot"></span>
+                                    <span class="task-title">${t.title}</span>
+                                    <span class="task-id">#${t.id}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (inwork.length) {
+                tasksHtml += `
+                    <div class="status-group status-inwork">
+                        <h4>В работе <span class="count">${inwork.length}</span></h4>
+                        <ul class="task-list">
+                            ${inwork.map(t => `
+                                <li class="task-item inwork" data-search="${t.title.toLowerCase()}">
+                                    <span class="status-dot"></span>
+                                    <span class="task-title">${t.title}</span>
+                                    <span class="task-id">#${t.id}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (pending.length) {
+                tasksHtml += `
+                    <div class="status-group status-pending">
+                        <h4>Ожидающие <span class="count">${pending.length}</span></h4>
+                        <ul class="task-list">
+                            ${pending.map(t => `
+                                <li class="task-item pending" data-search="${t.title.toLowerCase()}">
+                                    <span class="status-dot"></span>
+                                    <span class="task-title">${t.title}</span>
+                                    <span class="task-id">#${t.id}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            card.innerHTML = `
+                <div class="director-header" onclick="toggleCard(this)">
+                    <div class="title">
+                        <h3>${d.director} | ${deptNames[dept]}</h3>
+                        <span class="badge">${tasks.length} задач</span>
+                    </div>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="director-content">
+                    ${tasksHtml}
+                </div>
+            `;
+            
+            section.appendChild(card);
+        });
+    }
+    
+    function toggleCard(header) {
+        const card = header.closest('.director-card');
+        card.classList.toggle('expanded');
+    }
+    
+    function setupSearch() {
+        const input = document.getElementById('searchInput');
+        input.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.director-card').forEach(card => {
+                const items = card.querySelectorAll('.task-item');
+                let hasMatch = false;
+                items.forEach(item => {
+                    const text = item.getAttribute('data-search');
+                    if (query && text.includes(query)) {
+                        item.classList.remove('hidden');
+                        hasMatch = true;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+                if (query) {
+                    card.classList.add('expanded');
+                }
+            });
+        });
+    }
+    
+    renderHeroCards();
+    renderDetailCards();
+    setupSearch();
     </script>
 </body>
 </html>
