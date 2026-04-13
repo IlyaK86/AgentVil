@@ -3,393 +3,773 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Дашборд задач директоров</title>
+    <title>Vilavi Task Intelligence - Анализ нагрузки директоров</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6f8; padding: 20px; }
+        :root {
+            --bg-dark: #0f1419;
+            --bg-card: #1a2332;
+            --bg-card-hover: #243447;
+            --text-primary: #e7e9ea;
+            --text-secondary: #8b98a5;
+            --accent-blue: #1d9bf0;
+            --accent-green: #00ba7c;
+            --accent-yellow: #ffd400;
+            --accent-red: #f4212e;
+            --border-color: #2f3f50;
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
         
-        h1 { text-align: center; margin-bottom: 20px; color: #1a1a1a; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
-        .search-box { max-width: 600px; margin: 0 auto 20px; }
-        .search-box input { width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
         
-        .hero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; max-width: 1200px; margin: 0 auto 24px; }
-        .hero-card { background: #fff; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .hero-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
-        .hero-card .name { font-weight: 600; font-size: 14px; margin-bottom: 4px; color: #333; }
-        .hero-card .dept { font-size: 12px; color: #666; margin-bottom: 8px; }
-        .hero-card .count { font-size: 28px; font-weight: 700; color: #0066cc; }
-        .hero-card .count-label { font-size: 11px; color: #999; }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #1a2332 0%, #0f1419 100%);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
         
-        .detail-section { max-width: 1200px; margin: 0 auto; }
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent-blue), #00ba7c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
         
-        .director-card { background: #fff; border-radius: 12px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .header h1 i {
+            -webkit-text-fill-color: var(--accent-blue);
+            margin-right: 12px;
+        }
         
-        .director-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
-        .director-header:hover { background: #f9f9f9; }
-        .director-header .title { display: flex; align-items: center; gap: 12px; }
-        .director-header h3 { font-size: 16px; color: #1a1a1a; }
-        .director-header .badge { background: #e8f0fe; color: #1a73e8; padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 500; }
-        .director-header .arrow { transition: transform 0.3s; color: #666; }
-        .director-card.expanded .arrow { transform: rotate(180deg); }
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
         
-        .director-content { display: none; padding: 0 20px 20px; }
-        .director-card.expanded .director-content { display: block; }
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
         
-        .status-group { margin-bottom: 16px; }
-        .status-group h4 { font-size: 13px; color: #666; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid; display: flex; justify-content: space-between; align-items: center; }
-        .status-group h4 .count { font-weight: 600; }
+        .kpi-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
         
-        .status-completed h4 { border-color: #34a853; color: #34a853; }
-        .status-inwork h4 { border-color: #fbbc04; color: #fbbc04; }
-        .status-pending h4 { border-color: #ea4335; color: #ea4335; }
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
         
-        .task-list { list-style: none; }
-        .task-item { padding: 10px 12px; margin-bottom: 6px; background: #fafafa; border-radius: 6px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; transition: background 0.2s; }
-        .task-item:hover { background: #f0f0f0; }
-        .task-item .task-main { display: flex; align-items: flex-start; gap: 10px; }
-        .task-item .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
-        .task-item.completed .status-dot { background: #34a853; }
-        .task-item.inwork .status-dot { background: #fbbc04; }
-        .task-item.pending .status-dot { background: #ea4335; }
-        .task-item .task-title { font-size: 13px; color: #333; flex: 1; word-break: break-word; font-weight: 500; }
-        .task-item .task-id { font-size: 11px; color: #999; flex-shrink: 0; }
-        .task-item .task-summary { font-size: 12px; color: #666; padding-left: 18px; line-height: 1.4; }
-        .task-item .task-summary:empty { display: none; }
+        .kpi-card i {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
         
-        .hidden { display: none !important; }
+        .kpi-card:nth-child(1) i { color: var(--accent-blue); }
+        .kpi-card:nth-child(2) i { color: var(--accent-yellow); }
+        .kpi-card:nth-child(3) i { color: var(--accent-green); }
+        .kpi-card:nth-child(4) i { color: #a78bfa; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .director-card.expanded { animation: fadeIn 0.3s ease; }
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
         
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal { background: #fff; border-radius: 12px; max-width: 600px; width: 90%; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; transform: scale(0.9); transition: transform 0.2s; }
-        .modal-overlay.active .modal { transform: scale(1); }
-        .modal-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-        .modal-header h3 { font-size: 16px; color: #1a1a1a; flex: 1; word-break: break-word; }
-        .modal-header .task-id { font-size: 12px; color: #999; flex-shrink: 0; }
-        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #666; padding: 0; line-height: 1; }
-        .modal-close:hover { color: #333; }
-        .modal-body { padding: 16px 20px; overflow-y: auto; line-height: 1.6; color: #333; }
-        .modal-footer { padding: 12px 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; }
+        .kpi-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .search-row {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 280px;
+            padding: 14px 18px;
+            padding-left: 46px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.15);
+        }
+        
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 280px;
+        }
+        
+        .search-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
+        .filter-select {
+            padding: 14px 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            min-width: 160px;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+        
+        .directors-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .director-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .director-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+        
+        .director-card.expanded {
+            grid-column: 1 / -1;
+            background: var(--bg-card-hover);
+        }
+        
+        .director-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        
+        .director-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        
+        .director-role {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        .workload-badge {
+            background: linear-gradient(135deg, var(--accent-blue), #00ba7c);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: auto;
+        }
+        
+        .task-stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            padding: 14px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        
+        .stat-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .stat-bar-fill.executor { background: linear-gradient(90deg, var(--accent-blue), #60a5f4); }
+        .stat-bar-fill.creator { background: linear-gradient(90deg, #a78bfa, #c4b5fd); }
+        
+        .expand-hint {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .task-list {
+            display: none;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .director-card.expanded .task-list {
+            display: block;
+        }
+        
+        .director-card.expanded .expand-hint i {
+            transform: rotate(180deg);
+        }
+        
+        .task-group {
+            margin-bottom: 28px;
+        }
+        
+        .task-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .task-group-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+        }
+        
+        .task-group-header.completed {
+            border-color: var(--accent-green);
+        }
+        
+        .task-group-header.in-progress {
+            border-color: var(--accent-blue);
+        }
+        
+        .task-group-header.pending {
+            border-color: var(--accent-yellow);
+        }
+        
+        .task-group-header i {
+            font-size: 1.2rem;
+        }
+        
+        .task-group-header.completed i { color: var(--accent-green); }
+        .task-group-header.in-progress i { color: var(--accent-blue); }
+        .task-group-header.pending i { color: var(--accent-yellow); }
+        
+        .task-group-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .task-group-count {
+            margin-left: auto;
+            background: var(--border-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .task-items {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .task-item {
+            background: rgba(0,0,0,0.25);
+            padding: 14px 18px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: background 0.2s;
+        }
+        
+        .task-item:hover {
+            background: rgba(0,0,0,0.35);
+        }
+        
+        .task-id {
+            font-family: 'Consolas', monospace;
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 50px;
+        }
+        
+        .task-title {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        
+        .task-role {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .task-role.executor {
+            background: rgba(29, 155, 240, 0.2);
+            color: var(--accent-blue);
+        }
+        
+        .task-role.creator {
+            background: rgba(167, 139, 250, 0.2);
+            color: #a78bfa;
+        }
+        
+        .task-deadline {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .task-deadline.overdue {
+            color: var(--accent-red);
+        }
+        
+        .empty-tasks {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        
+        .empty-tasks i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 1200px) {
+            .directors-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .kpi-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .directors-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .task-item {
+                flex-wrap: wrap;
+            }
+            
+            .task-deadline {
+                width: 100%;
+                margin-top: 8px;
+                padding-left: 64px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Дашборд задач директоров</h1>
-    
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Поиск по названию задачи...">
+    <div class="header">
+        <h1><i class="fas fa-chart-pie"></i> Vilavi Task Intelligence - Анализ нагрузки директоров</h1>
+        <p>Полная визуализация рабочей нагрузки директоров компании</p>
     </div>
     
-    <div class="hero-grid" id="heroGrid"></div>
-    
-    <div class="detail-section" id="detailSection"></div>
-    
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-        <div class="modal" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <h3 id="modalTitle"></h3>
-                <span class="task-id" id="modalId"></span>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body" id="modalBody"></div>
-            <div class="modal-footer" id="modalFooter"></div>
+    <div class="kpi-row">
+        <div class="kpi-card">
+            <i class="fas fa-users"></i>
+            <div class="kpi-value" id="totalDirectors">-</div>
+            <div class="kpi-label">Директоров</div>
+        </div>
+        <div class="kpi-card">
+            <i class="fas fa-tasks"></i>
+            <div class="kpi-value" id="totalTasks">-</div>
+            <div class="kpi-label">Всего задач</div>
+        </div>
+        <div class="kpi-card">
+            <i class="fas fa-check-circle"></i>
+            <div class="kpi-value" id="completedTasks">-</div>
+            <div class="kpi-label">Выполнено</div>
+        </div>
+        <div class="kpi-card">
+            <i class="fas fa-spinner"></i>
+            <div class="kpi-value" id="inProgressTasks">-</div>
+            <div class="kpi-label">В работе</div>
         </div>
     </div>
     
+    <div class="search-row">
+        <div class="search-wrapper">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Поиск по задачам...">
+        </div>
+        <select class="filter-select" id="statusFilter">
+            <option value="all">Все статусы</option>
+            <option value="completed">Выполнено</option>
+            <option value="inProgress">В работе</option>
+            <option value="pending">В ожидании</option>
+        </select>
+        <select class="filter-select" id="directorFilter">
+            <option value="all">Все директоры</option>
+        </select>
+    </div>
+    
+    <div class="directors-grid" id="directorsGrid"></div>
+    
     <script>
-    const rawData = {
-        "1": {
-            "name": "Древс Евгений Сергеевич",
-            "tasks": [
-                {"id": "11003", "title": "Серверная лицензия 1С", "description": "Необходимо приобрести серверную лицензию 1С на ООО Вилави", "status": "2", "deadline": "2026-04-30T17:00:00+07:00"},
-                {"id": "10679", "title": "Подготовить досудебную претензию по договору ИИ-Бот", "description": "[user=1]Древс Евгений Сергеевич[/user]:\n1)Подготовить технический перечень недостатков\n2)Определить нарушение сроков в течение всего контракта по всем этапам.\n[user=26]Мельников Вячеслав Александрович", "status": "3", "deadline": "2026-04-13T18:00:00+07:00"},
-                {"id": "10447", "title": "[ФРЗ] Реализовать поиск и выдачу заказа по qr в warehouse", "description": "ТЗ [url]https://docs.google.com/document/d/1hgn1fUtZb5OUZjuAKZ8PhyJedKKvlmYaV-heEj3cOlk/edit?tab=t.0#heading=h.ahwofjje4x4[/url]\n\nРеализовать интерфейс сканирования QR-кодов, блокировку выдачи без ска", "status": "2", "deadline": "2026-04-13T18:00:00+07:00"},
-                {"id": "8989", "title": "Бюджет на Апрель 2026. IT.", "description": "[url]https://docs.google.com/spreadsheets/d/1Bg8ia5Naz0lUj98K6Ni2SK_lgKhqF9JhSHiZ6J8qzUc/edit?gid=881618964#gid=881618964[/url]", "status": "5", "deadline": "2026-03-25T18:00:00+07:00"},
-                {"id": "7507", "title": "Бюджет на Март 2026. IT.", "description": "[url]https://docs.google.com/spreadsheets/d/1Bg8ia5Naz0lUj98K6Ni2SK_lgKhqF9JhSHiZ6J8qzUc/edit?gid=2027296330#gid=2027296330[/url]", "status": "5", "deadline": "2026-02-26T18:00:00+07:00"}
-            ]
-        },
-        "18": {
-            "name": "Крицкий Денис Михайлович",
-            "tasks": [
-                {"id": "10351", "title": "[Беларусь] Принять решение по варианту внедрения изменений для Белоруссии", "description": "[b]Цель[/b]: Определить вариант, который будет взят в работу.\n\nВ процессе работы над задачей возникли трудности. Необходимо принять решение в какой[u][b] вариант[/b][/u] реализации идем.\n- интернет - ", "status": "5", "deadline": "2026-04-07T18:00:00+07:00"},
-                {"id": "10227", "title": "[Заказ] Продажа ЧЗ набора Mito Base для ЮЛ только с ОС", "description": "[b]Цель:[/b] Минимизировать отток и негативную реакцию у ЮЛ относительно заказа продукции на сайте\n\n[b]Проблема:[/b] На данный момент Mito Base расшили и он стал набором, а не единичным продуктом как ", "status": "5", "deadline": "2026-04-03T18:00:00+07:00"},
-                {"id": "10203", "title": "KPI маркетинг на апрель 2026", "description": "Выставить KPI по всем сотрудникам подразделений на апрель 2026 в формате измеримых целей.\n[user=198]Жезлова Ольга Сергеевна[/user] [user=52]Кретова Ольга Николаевна[/user] [user=214]Власова Юлия[/user", "status": "2", "deadline": "2026-03-31T10:00:00+07:00"},
-                {"id": "9481", "title": "Описание механики процесса начисления бонусов (не выданные заказы)", "description": "Подготовить описание процесса  начисления бонусов  [user=18]Крицкий Денис Михайлович[/user]\nВыгрузка списка всех невыданных заказов [user=22]Подойникова Анна Александровна[/user]", "status": "2", "deadline": "2026-03-27T18:00:00+07:00"},
-                {"id": "9209", "title": "Первичная переработка структуры презентации", "description": "Необходимо переработать структуру презентации маркетплана \n\nВидение и направление проработает [user=18]Крицкий Денис Михайлович[/user]\nПредоставит наработки [user=218]Мосина Маргарита Александровна[/u", "status": "3", "deadline": "2026-05-01T18:00:00+07:00"}
-            ]
-        },
-        "26": {
-            "name": "Мельников Вячеслав Александрович",
-            "tasks": [
-                {"id": "10895", "title": "Смена данных на лендинге O!Test", "description": "Заметили, что на сайте [url]https://o-test.vilavi.com/[/url] указаны неактуальные данные о телефоне и времени работы клиентского сервиса\n\nТакже на нем указан адрес почты [url=mailto:INFO@VILAVI.COM]IN", "status": "2", "deadline": "2026-04-13T15:43:00+07:00"},
-                {"id": "10821", "title": "Юр. отдел - проверка договора по рассрочке КЗ", "description": "Какие риски есть и как их можно нивелировать?", "status": "5", "deadline": "2026-04-10T10:00:00+07:00"},
-                {"id": "10637", "title": "Какие документы  необходимо предоставить для того, чтобы клиника могла работать с БАД.", "description": "[url]https://infovlvshopru.amocrm.ru/leads/detail/41606831[/url]\nПоступил вопрос от партнера: \" Какие документы мне необходимо предоставить для того, чтобы клиника могла работать с БАД. И какой закон ", "status": "5", "deadline": "2026-04-14T18:00:00+07:00"},
-                {"id": "10631", "title": "Расторжение договора", "description": "Нужно подготовить уведомление о расторжении договора с нашей стороны и требование возврата первоначального взноса в размере 1 724 625 KZT", "status": "2", "deadline": "2026-04-13T18:00:00+07:00"},
-                {"id": "10539", "title": "Подготовить соглашение на использование мессенджер", "description": "В мессенджер мы используем механизмы блокировок пользователей. Необходимо подготовить соглашение которое давало бы возможность блокировать пользователей \n\nchat.vilavi.com", "status": "2", "deadline": "2026-04-09T18:00:00+07:00"}
-            ]
-        },
-        "12": {
-            "name": "Колчина Елена Викторовна",
-            "tasks": [
-                {"id": "10745", "title": "КС_АПРЕЛЬ_АКЦИЯ ВЫХОДНОГО ДНЯ", "description": "Проводим на выходных 18-19 апреля акцию по распродаже товаров с истекающим сроком годности. 1) распродаем товары, избегая риска их списания 2) увеличиваем ТО в выходные дни\n\nУЗБ: BRAIN COFFEE\nКГЗ: Вит", "status": "3", "deadline": "2026-04-21T18:00:00+07:00"},
-                {"id": "10045", "title": "Анализ диалогов КС 2025", "description": "Требования для анализа собраны тут: [url]https://docs.google.com/document/d/1ZkLVgPppvCbhne42_MEUZ0gKEWIdCZDowJg2pAv3jvc/edit?tab=t.0#heading=h.i1xjya38f455[/url]\nПолученную аналитику прикрепила к зад", "status": "5", "deadline": "2026-04-01T18:00:00+07:00"},
-                {"id": "9829", "title": "Выплата бонусов (добавление кодов оквэд)", "description": "представителям для получения бонусов необходимо добавить коды оквэд:\n\n63.99.1 Деятельность по оказанию\nконсультационных и информационных\nуслуг\n\n73.20 Исследование конъюнктуры рынка и\nизучение обществе", "status": "3", "deadline": "2026-04-30T18:00:00+07:00"},
-                {"id": "9623", "title": "Автоматизация ответов КС", "description": "Во вложении база знаний для бота, которую собрал Саша", "status": "2", "deadline": "2026-05-29T18:00:00+07:00"},
-                {"id": "9085", "title": "Проанализировать задачи по настройки AmoCRM", "description": "", "status": "2", "deadline": "2026-04-10T20:00:00+07:00"}
-            ]
-        },
-        "30": {
-            "name": "Мирная Инна",
-            "tasks": [
-                {"id": "9945", "title": "подбор бухгалтера по налогам", "description": "Коллеги, добрый день!\n\nСоздала задачу по подбору на вакансию бухгалтер по налогам. Светлана, напиши, пожалуйста, функционал.", "status": "2", "deadline": "2026-04-10T18:00:00+07:00"},
-                {"id": "8987", "title": "Бюджет на Апрель 2026. HR", "description": "[url]https://docs.google.com/spreadsheets/d/1Ervk1TN8yIUm6KVmKiCBmNCvNQQB2jaa9_7Pd5fbJrY/edit?gid=2000967727#gid=2000967727[/url]", "status": "5", "deadline": "2026-03-27T18:00:00+07:00"},
-                {"id": "7497", "title": "Бюджет на Март 2026. HR", "description": "[url]https://docs.google.com/spreadsheets/d/1Ervk1TN8yIUm6KVmKiCBmNCvNQQB2jaa9_7Pd5fbJrY/edit?gid=471036980#gid=471036980[/url]", "status": "5", "deadline": "2026-02-25T18:00:00+07:00"},
-                {"id": "7309", "title": "Подбор кладовщика ( Кусково)", "description": "Прошу открыть подбор на должность кладовщика на склад МСК (Кусково ) на замену Максима Савостьянова (увольняется)[url=https://vilavi.bitrix24.ru/company/personal/user/389/][/url][url=https://vilavi.bi", "status": "5", "deadline": "2026-02-27T18:00:00+07:00"},
-                {"id": "6517", "title": "Пенсия и прочие начисления и выплаты при работе из РФ на компанию в Казахстане", "description": "", "status": "6", "deadline": "2026-02-27T18:00:00+07:00"}
-            ]
-        },
-        "16": {
-            "name": "Пронин Сергей",
-            "tasks": [
-                {"id": "10839", "title": "Переупаковка основной партии Eroboost RX и  SX.", "description": "Цель определить сроки замены подложек на всей партии на всех складах, где есть продукция.\n\nНужно понимать конкретные сроки поступления на склады Мск и Астана и переупаковки там. \n\n[user=16]Пронин Серг", "status": "2", "deadline": "2026-04-10T18:00:00+07:00"},
-                {"id": "10669", "title": "Визуализация на WR. Изменения", "description": "С учетом изменения требований по WR (каждый понедельник) к слайдам необходимо добавить:\n1. Основные задачи на месяц и их динамику \n2. Задачи на неделю в рамках месячной задачи\nПример: переезд склада -", "status": "2", "deadline": "2026-04-17T18:00:00+07:00"},
-                {"id": "10339", "title": "Инвентаризация остатков (в том числе по франшизам)", "description": "Задача с совещания 30.03.26.\nПодготовить документ(отчет) \nС информацией по остатку позиций на всех складах", "status": "2", "deadline": "2026-05-04T18:00:00+07:00"},
-                {"id": "10337", "title": "[Товар] Покупка и доступность Митобазы на всех складах и пвз", "description": "Задача с совещания от 30.03.26, по завершению задачи будет создана встреча.\nПроработать вопрос наличия Митобазы по всей сети для запуска продажи продукта.", "status": "5", "deadline": "2026-04-06T18:00:00+07:00"},
-                {"id": "10301", "title": "Переезд склада в МСК", "description": "В целях оптимизации затрат принято решение сменить адрес склада и отказаться от шоу-рума как не актуального при текущем этапе развития\n\nКритерии поиска основные:\n\n1. Налоговая №20 (уточним требования ", "status": "3", "deadline": "2026-04-30T18:00:00+07:00"}
-            ]
-        }
-    };
-    
-    const deptNames = {
-        "IT": "IT",
-        "Коммерческий": "Коммерческий",
-        "Юридический": "Юридический",
-        "Клиентский": "Клиентский",
-        "HR": "HR",
-        "Логистика": "Логистика"
-    };
-    
-    const statusLabels = {
-        "5": "Завершена",
-        "6": "Подтверждена",
-        "2": "Pending",
-        "3": "В работе"
-    };
-    
-    function getStatusClass(status) {
-        if (status === "5" || status === "6") return "completed";
-        if (status === "3") return "inwork";
-        return "pending";
-    }
-    
-    function getSummary(description) {
-        if (!description) return '';
-        const firstSentence = description.split(/[.\n]/)[0].trim();
-        return firstSentence.length > 100 ? firstSentence.substring(0, 100) + '...' : firstSentence;
-    }
-    
-    function formatDeadline(deadline) {
-        if (!deadline) return '';
-        const date = new Date(deadline);
-        return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
-    }
-    
-    function formatDescription(description) {
-        if (!description) return 'Нет описания';
-        return description
-            .replace(/\[url\](.*?)\[\/url\]/g, '<a href="$1" target="_blank">$1</a>')
-            .replace(/\[url=([^\]]+)\](.*?)\[\/url\]/g, '<a href="$1" target="_blank">$2</a>')
-            .replace(/\[user=(\d+)\](.*?)\[\/user\]/g, '<strong>$2</strong>')
-            .replace(/\[b\](.*?)\[\/b\]/g, '<strong>$1</strong>')
-            .replace(/\[u\](.*?)\[\/u\]/g, '<u>$1</u>')
-            .replace(/\n/g, '<br>');
-    }
-    
-    function showTaskModal(task) {
-        const overlay = document.getElementById('modalOverlay');
-        document.getElementById('modalTitle').textContent = task.title;
-        document.getElementById('modalId').textContent = '#' + task.id;
-        document.getElementById('modalBody').innerHTML = formatDescription(task.description);
+        const directorNames = {
+            "1": { name: "Евгений Древс", role: "Директор IT", color: "#3b82f6" },
+            "18": { name: "Денис Крицкий", role: "Коммерческий директор", color: "#f59e0b" },
+            "26": { name: "Вячеслав Мельников", role: "Директор по правовым вопросам", color: "#10b981" },
+            "12": { name: "Анастасия Колчина", role: "Директор по клиентскому сервису", color: "#ec4899" },
+            "30": { name: "Инна Мирная", role: "Директор по персоналу HR", color: "#8b5cf6" },
+            "16": { name: "Сергей Пронин", role: "Операционный директор, Логистика", color: "#06b6d4" },
+            "427": { name: "Илья Картунов", role: "Директор", color: "#6366f1" }
+        };
         
-        let footerText = '';
-        if (task.deadline) {
-            footerText += 'Срок: ' + formatDeadline(task.deadline) + ' | ';
-        }
-        footerText += 'Статус: ' + (statusLabels[task.status] || task.status);
-        document.getElementById('modalFooter').textContent = footerText;
+        const avatarColors = {
+            "1": "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+            "18": "linear-gradient(135deg, #f59e0b, #d97706)",
+            "26": "linear-gradient(135deg, #10b981, #059669)",
+            "12": "linear-gradient(135deg, #ec4899, #db2777)",
+            "30": "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+            "16": "linear-gradient(135deg, #06b6d4, #0891b2)",
+            "427": "linear-gradient(135deg, #6366f1, #4f46e5)"
+        };
         
-        overlay.classList.add('active');
-    }
-    
-    function closeModal(e) {
-        if (!e || e.target === document.getElementById('modalOverlay') || e.target.classList.contains('modal-close')) {
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-    }
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
-    });
-    
-    function countByStatus(tasks, status) {
-        return tasks.filter(t => t.status === status).length;
-    }
-    
-    function renderHeroCards() {
-        const grid = document.getElementById('heroGrid');
-        grid.innerHTML = '';
+        let expandedCard = null;
+        let currentData = null;
         
-        Object.keys(rawData).forEach(id => {
-            const d = rawData[id];
-            const card = document.createElement('div');
-            card.className = 'hero-card';
-            card.onclick = () => scrollToDirector(id);
-            card.innerHTML = `
-                <div class="name">${d.name}</div>
-                <div class="dept">${d.tasks.length} задач</div>
-                <div class="count">${d.tasks.length}</div>
-                <div class="count-label">задач</div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-    
-    function scrollToDirector(id) {
-        const el = document.getElementById('director-' + id);
-        if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-            el.classList.add('expanded');
-        }
-    }
-    
-    function renderDetailCards() {
-        const section = document.getElementById('detailSection');
-        section.innerHTML = '';
-        
-        Object.keys(rawData).forEach(id => {
-            const d = rawData[id];
-            const tasks = d.tasks;
-            
-            const completed = tasks.filter(t => t.status === "5" || t.status === "6");
-            const inwork = tasks.filter(t => t.status === "3");
-            const pending = tasks.filter(t => t.status === "2");
-            
-            const card = document.createElement('div');
-            card.className = 'director-card';
-            card.id = 'director-' + id;
-            
-            let tasksHtml = '';
-            
-            if (completed.length) {
-                tasksHtml += `
-                    <div class="status-group status-completed">
-                        <h4>Завершённые <span class="count">${completed.length}</span></h4>
-                        <ul class="task-list">
-                            ${completed.map(t => `
-                                <li class="task-item completed" data-search="${(t.title + ' ' + (t.description || '')).toLowerCase()}" onclick="showTaskModal(tasks.find(x => x.id === '${t.id}'))">
-                                    <div class="task-main">
-                                        <span class="status-dot"></span>
-                                        <span class="task-title">${t.title}</span>
-                                        <span class="task-id">#${t.id}</span>
-                                    </div>
-                                    <span class="task-summary">${getSummary(t.description)}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
+        function getInitials(name) {
+            const parts = name.split(' ');
+            if (parts.length >= 2) {
+                return parts[0][0] + parts[1][0];
             }
-            
-            if (inwork.length) {
-                tasksHtml += `
-                    <div class="status-group status-inwork">
-                        <h4>В работе <span class="count">${inwork.length}</span></h4>
-                        <ul class="task-list">
-                            ${inwork.map(t => `
-                                <li class="task-item inwork" data-search="${(t.title + ' ' + (t.description || '')).toLowerCase()}" onclick="showTaskModal(tasks.find(x => x.id === '${t.id}'))">
-                                    <div class="task-main">
-                                        <span class="status-dot"></span>
-                                        <span class="task-title">${t.title}</span>
-                                        <span class="task-id">#${t.id}</span>
-                                    </div>
-                                    <span class="task-summary">${getSummary(t.description)}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
-            }
-            
-            if (pending.length) {
-                tasksHtml += `
-                    <div class="status-group status-pending">
-                        <h4>Ожидающие <span class="count">${pending.length}</span></h4>
-                        <ul class="task-list">
-                            ${pending.map(t => `
-                                <li class="task-item pending" data-search="${(t.title + ' ' + (t.description || '')).toLowerCase()}" onclick="showTaskModal(tasks.find(x => x.id === '${t.id}'))">
-                                    <div class="task-main">
-                                        <span class="status-dot"></span>
-                                        <span class="task-title">${t.title}</span>
-                                        <span class="task-id">#${t.id}</span>
-                                    </div>
-                                    <span class="task-summary">${getSummary(t.description)}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
-            }
-            
-            card.innerHTML = `
-                <div class="director-header" onclick="toggleCard(this)">
-                    <div class="title">
-                        <h3>${d.name}</h3>
-                        <span class="badge">${tasks.length} задач</span>
-                    </div>
-                    <span class="arrow">▼</span>
-                </div>
-                <div class="director-content">
-                    ${tasksHtml}
-                </div>
-            `;
-            
-            section.appendChild(card);
-        });
-    }
-    
-    function toggleCard(header) {
-        const card = header.closest('.director-card');
-        card.classList.toggle('expanded');
-    }
-    
-    function setupSearch() {
-        const input = document.getElementById('searchInput');
-        input.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            document.querySelectorAll('.director-card').forEach(card => {
-                const items = card.querySelectorAll('.task-item');
-                let hasMatch = false;
-                items.forEach(item => {
-                    const text = item.getAttribute('data-search');
-                    if (query && text.includes(query)) {
-                        item.classList.remove('hidden');
-                        hasMatch = true;
-                    } else {
-                        item.classList.add('hidden');
-                    }
-                });
-                if (query) {
-                    card.classList.add('expanded');
+            return name.substring(0, 2);
+        }
+        
+        function formatDeadline(dateStr) {
+            if (!dateStr) return '<span class="task-deadline"><i class="fas fa-minus"></i> Без срока</span>';
+            const date = new Date(dateStr);
+            const now = new Date();
+            const isOverdue = date < now;
+            const formatted = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+            return `<span class="task-deadline ${isOverdue ? 'overdue' : ''}"><i class="fas fa-calendar"></i> ${formatted}</span>`;
+        }
+        
+        function getTaskGroups(tasks, searchTerm = '', statusFilter = 'all') {
+            const filtered = tasks.filter(task => {
+                const matchesSearch = !searchTerm || 
+                    task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    task.id.includes(searchTerm);
+                
+                let matchesStatus = true;
+                if (statusFilter === 'completed') {
+                    matchesStatus = task.status === '5' || task.status === '6';
+                } else if (statusFilter === 'inProgress') {
+                    matchesStatus = task.status === '3' || task.status === '4';
+                } else if (statusFilter === 'pending') {
+                    matchesStatus = task.status === '1' || task.status === '2';
                 }
+                
+                return matchesSearch && matchesStatus;
             });
+            
+            const completed = filtered.filter(t => t.status === '5' || t.status === '6');
+            const inProgress = filtered.filter(t => t.status === '3' || t.status === '4');
+            const pending = filtered.filter(t => t.status === '1' || t.status === '2');
+            
+            return { completed, inProgress, pending, total: filtered.length };
+        }
+        
+        function renderTaskGroup(title, icon, tasks, className, searchTerm, statusFilter) {
+            if (tasks.length === 0) return '';
+            
+            const { completed, inProgress, pending } = getTaskGroups(tasks, searchTerm, statusFilter);
+            
+            let filteredTasks = tasks;
+            if (searchTerm || statusFilter !== 'all') {
+                filteredTasks = tasks.filter(task => {
+                    const matchesSearch = !searchTerm || 
+                        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        task.id.includes(searchTerm);
+                    
+                    let matchesStatus = true;
+                    if (statusFilter === 'completed') {
+                        matchesStatus = task.status === '5' || task.status === '6';
+                    } else if (statusFilter === 'inProgress') {
+                        matchesStatus = task.status === '3' || task.status === '4';
+                    } else if (statusFilter === 'pending') {
+                        matchesStatus = task.status === '1' || task.status === '2';
+                    }
+                    
+                    return matchesSearch && matchesStatus;
+                });
+            }
+            
+            if (filteredTasks.length === 0) return '';
+            
+            const iconClass = className === 'completed' ? 'fa-check-circle' : className === 'in-progress' ? 'fa-spinner' : 'fa-clock';
+            const statusCount = filteredTasks.length;
+            
+            let tasksHtml = filteredTasks.map(task => `
+                <div class="task-item">
+                    <span class="task-id">#${task.id}</span>
+                    <span class="task-title">${task.title}</span>
+                    <span class="task-role ${task.isExecutor ? 'executor' : 'creator'}">
+                        <i class="fas ${task.isExecutor ? 'fa-hand-pointer' : 'fa-plus'}"></i>
+                        ${task.isExecutor ? 'Исполнитель' : 'Создатель'}
+                    </span>
+                    ${formatDeadline(task.deadline)}
+                </div>
+            `).join('');
+            
+            return `
+                <div class="task-group">
+                    <div class="task-group-header ${className}">
+                        <i class="fas ${iconClass}"></i>
+                        <span class="task-group-title">${title}</span>
+                        <span class="task-group-count">${statusCount}</span>
+                    </div>
+                    <div class="task-items">
+                        ${tasksHtml}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderDirectorCard(directorId, director) {
+            const info = directorNames[directorId] || { name: director.name, role: director.role || 'Director', color: '#6b7280' };
+            const maxWorkload = 35;
+            const executorPercent = Math.min((director.asExecutor.total / maxWorkload) * 100, 100);
+            const creatorPercent = Math.min((director.asCreator.total / maxWorkload) * 100, 100);
+            const initials = getInitials(info.name);
+            const bgColor = avatarColors[directorId] || 'linear-gradient(135deg, #6b7280, #4b5563)';
+            
+            const searchTerm = document.getElementById('searchInput').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            const { completed, inProgress, pending, total } = getTaskGroups(director.tasks, searchTerm, statusFilter);
+            
+            const taskListHtml = director.tasks.length > 0 ? 
+                renderTaskGroup('Выполнено', 'check', director.tasks, 'completed', searchTerm, statusFilter) +
+                renderTaskGroup('В работе', 'spinner', director.tasks, 'in-progress', searchTerm, statusFilter) +
+                renderTaskGroup('В ожидании', 'clock', director.tasks, 'pending', searchTerm, statusFilter) :
+                `<div class="empty-tasks">
+                    <i class="fas fa-clipboard-check"></i>
+                    <div>Нет задач</div>
+                </div>`;
+            
+            return `
+                <div class="director-card" data-director="${directorId}" onclick="toggleCard(this)">
+                    <div class="director-header">
+                        <div class="avatar" style="background: ${bgColor}">${initials}</div>
+                        <div class="director-info">
+                            <h3>${info.name}</h3>
+                            <div class="director-role">${info.role}</div>
+                        </div>
+                        <div class="workload-badge">${director.totalWorkload} задач</div>
+                    </div>
+                    
+                    <div class="task-stats">
+                        <div class="stat-item">
+                            <div class="stat-label"><i class="fas fa-hand-pointer"></i> Как исполнитель</div>
+                            <div class="stat-value">${director.asExecutor.total}</div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill executor" style="width: ${executorPercent}%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label"><i class="fas fa-plus"></i> Как создатель</div>
+                            <div class="stat-value">${director.asCreator.total}</div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill creator" style="width: ${creatorPercent}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="expand-hint">
+                        <i class="fas fa-chevron-down"></i> Нажмите для деталей
+                    </div>
+                    
+                    <div class="task-list">
+                        ${taskListHtml}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function toggleCard(card) {
+            const directorId = card.dataset.director;
+            
+            if (expandedCard === directorId) {
+                card.classList.remove('expanded');
+                expandedCard = null;
+            } else {
+                document.querySelectorAll('.director-card').forEach(c => c.classList.remove('expanded'));
+                card.classList.add('expanded');
+                expandedCard = directorId;
+                
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        }
+        
+        function calculateKPIs(data) {
+            let totalDirectors = Object.keys(data.directors).length;
+            let totalTasks = 0;
+            let completedTasks = 0;
+            let inProgressTasks = 0;
+            
+            Object.values(data.directors).forEach(director => {
+                director.tasks.forEach(task => {
+                    totalTasks++;
+                    if (task.status === '5' || task.status === '6') completedTasks++;
+                    if (task.status === '3' || task.status === '4') inProgressTasks++;
+                });
+            });
+            
+            return { totalDirectors, totalTasks, completedTasks, inProgressTasks };
+        }
+        
+        function populateDirectorFilter(data) {
+            const select = document.getElementById('directorFilter');
+            Object.entries(data.directors).forEach(([id, director]) => {
+                const info = directorNames[id] || { name: director.name };
+                select.innerHTML += `<option value="${id}">${info.name}</option>`;
+            });
+        }
+        
+        function renderDashboard(data) {
+            currentData = data;
+            const kpis = calculateKPIs(data);
+            
+            document.getElementById('totalDirectors').textContent = kpis.totalDirectors;
+            document.getElementById('totalTasks').textContent = kpis.totalTasks;
+            document.getElementById('completedTasks').textContent = kpis.completedTasks;
+            document.getElementById('inProgressTasks').textContent = kpis.inProgressTasks;
+            
+            populateDirectorFilter(data);
+            
+            const grid = document.getElementById('directorsGrid');
+            grid.innerHTML = Object.entries(data.directors)
+                .sort((a, b) => b[1].totalWorkload - a[1].totalWorkload)
+                .map(([id, director]) => renderDirectorCard(id, director))
+                .join('');
+        }
+        
+        document.getElementById('searchInput').addEventListener('input', () => {
+            if (currentData) renderDashboard(currentData);
         });
-    }
-    
-    renderHeroCards();
-    renderDetailCards();
-    setupSearch();
+        
+        document.getElementById('statusFilter').addEventListener('change', () => {
+            if (currentData) renderDashboard(currentData);
+        });
+        
+        document.getElementById('directorFilter').addEventListener('change', (e) => {
+            const selectedId = e.target.value;
+            if (selectedId === 'all') {
+                if (currentData) renderDashboard(currentData);
+            } else {
+                const filteredData = {
+                    directors: {
+                        [selectedId]: currentData.directors[selectedId]
+                    }
+                };
+                renderDashboard(filteredData);
+            }
+        });
+        
+        const embeddedData = {"directors":{"1":{"name":"Директор 1","role":"Director","asExecutor":{"total":5,"completed":5,"inProgress":0,"pending":0},"asCreator":{"total":3,"completed":1,"inProgress":1,"pending":1},"totalWorkload":8,"tasks":[{"id":"58","title":"Бюджет на Ноябрь 2025. IT.","status":"5","statusText":"Выполнено","deadline":"2025-10-28T18:00:00+07:00","isExecutor":true},{"id":"166","title":"Прием товара. FRONT","status":"5","statusText":"Выполнено","deadline":"2026-04-30T18:00:00+07:00","isExecutor":true},{"id":"256","title":"Установить 1С , создать клиента","status":"5","statusText":"Выполнено","deadline":"2025-11-07T18:00:00+07:00","isExecutor":true},{"id":"264","title":"Согласовать договор РТКЛАУД","status":"5","statusText":"Выполнено","deadline":"2025-10-29T18:00:00+07:00","isExecutor":false},{"id":"375","title":"Составить инструкции по обработке заявок на вывод бонусов","status":"3","statusText":"В работе","deadline":null,"isExecutor":false},{"id":"431","title":"Подготовка к Стратегической сессии Vilavi 2.0","status":"5","statusText":"Выполнено","deadline":"2025-10-30T18:00:00+07:00","isExecutor":true},{"id":"947","title":"KPI отдела ИТ","status":"2","statusText":"В ожидании","deadline":"2028-12-05T18:00:00+07:00","isExecutor":false},{"id":"1733","title":"Корректировка ID 286624","status":"5","statusText":"Выполнено","deadline":"2025-11-13T18:00:00+07:00","isExecutor":true}]},"18":{"name":"Директор 18","role":"Director","asExecutor":{"total":11,"completed":8,"inProgress":0,"pending":3},"asCreator":{"total":21,"completed":17,"inProgress":1,"pending":3},"totalWorkload":32,"tasks":[{"id":"164","title":"Беларусь: дополнительный расчет количества заказов","status":"5","statusText":"Выполнено","deadline":"2025-10-27T18:00:00+07:00","isExecutor":false},{"id":"284","title":"Узбекистан: тема выступления форуме от Киселевой А.А. 29.10.2025","status":"6","statusText":"Завершено","deadline":"2025-11-28T18:00:00+07:00","isExecutor":false},{"id":"333","title":"Узбекистан: согласование бюджета на спикера на форум 29-30.11.2025.","status":"6","statusText":"Завершено","deadline":"2025-11-28T18:00:00+07:00","isExecutor":false},{"id":"335","title":"Беларусь: получение обновленного КП от Filuet","status":"5","statusText":"Выполнено","deadline":"2026-01-19T12:00:00+07:00","isExecutor":false},{"id":"407","title":"Армения: доставка поставки от таможенного склада до получателя Oct`25","status":"5","statusText":"Выполнено","deadline":"2025-11-01T18:00:00+07:00","isExecutor":true},{"id":"427","title":"Подготовка к Стратегической сессии Vilavi 2.0","status":"5","statusText":"Выполнено","deadline":"2025-10-30T18:00:00+07:00","isExecutor":true},{"id":"501","title":"Армения: необходимость маркировки товаров для рынка","status":"5","statusText":"Выполнено","deadline":"2025-11-11T18:00:00+07:00","isExecutor":false},{"id":"547","title":"Турция: согласование графика оплат первой поставки в адрес С. Генча.","status":"5","statusText":"Выполнено","deadline":"2025-11-11T18:00:00+07:00","isExecutor":false},{"id":"659","title":"Офис: звукоизоляция переговорной HR","status":"5","statusText":"Выполнено","deadline":"2025-12-24T18:00:00+07:00","isExecutor":false},{"id":"675","title":"Кыргыстан: регламент взаимодействия","status":"6","statusText":"Завершено","deadline":"2025-12-02T18:00:00+07:00","isExecutor":true},{"id":"707","title":"Беларусь: выдача дегустационного продукта ноябрь-декабрь 2025","status":"5","statusText":"Выполнено","deadline":"2025-11-05T18:00:00+07:00","isExecutor":false},{"id":"947","title":"KPI отдела ИТ","status":"2","statusText":"В ожидании","deadline":"2028-12-05T18:00:00+07:00","isExecutor":true},{"id":"1027","title":"Армения: маркировка товаров","status":"5","statusText":"Выполнено","deadline":"2025-12-05T22:00:00+07:00","isExecutor":false},{"id":"1147","title":"Армения: частичная компенсация участия в форуме","status":"5","statusText":"Выполнено","deadline":"2025-11-17T18:00:00+07:00","isExecutor":true},{"id":"1289","title":"Беларусь: запуск сайта с экварингом - третий вариант (полный)","status":"2","statusText":"В ожидании","deadline":null,"isExecutor":true},{"id":"1445","title":"КОММЕРЧЕСКАЯ ФУНКЦИЯ: структура","status":"2","statusText":"В ожидании","deadline":"2026-05-31T18:00:00+07:00","isExecutor":true},{"id":"1447","title":"КОММЕРЧЕСКАЯ ФУНКЦИЯ: мотивация руководителя","status":"5","statusText":"Выполнено","deadline":"2025-11-21T18:00:00+07:00","isExecutor":true},{"id":"1449","title":"Отчет по командировке, Москва, 07.11.2025","status":"5","statusText":"Выполнено","deadline":"2025-11-11T18:00:00+07:00","isExecutor":true},{"id":"1505","title":"КОММЕРЧЕСКАЯ ФУНКЦИЯ: приказ о назначении","status":"5","statusText":"Выполнено","deadline":"2025-11-19T18:00:00+07:00","isExecutor":true},{"id":"1549","title":"(IT) Запуск MVP региона Белоруссия — первый вариант","status":"5","statusText":"Выполнено","deadline":"2026-03-31T18:00:00+07:00","isExecutor":false},{"id":"1571","title":"Списание товара со склада Узбекистана","status":"5","statusText":"Выполнено","deadline":"2025-11-11T18:00:00+07:00","isExecutor":true},{"id":"1657","title":"Армения: GTIN-маркировка","status":"5","statusText":"Выполнено","deadline":"2025-12-05T22:00:00+07:00","isExecutor":false},{"id":"1663","title":"БЗ Подписка (Предзаказ)","status":"3","statusText":"В работе","deadline":"2026-04-30T22:00:00+07:00","isExecutor":false},{"id":"1677","title":"Турция: договор поставки товаров","status":"2","statusText":"В ожидании","deadline":"2026-03-31T18:00:00+07:00","isExecutor":false}]},"26":{"name":"Директор 26","role":"Director","asExecutor":{"total":22,"completed":17,"inProgress":1,"pending":4},"asCreator":{"total":2,"completed":1,"inProgress":0,"pending":1},"totalWorkload":24,"tasks":[{"id":"62","title":"Бюджет на Ноябрь 2025. Юридический отдел.","status":"5","statusText":"Выполнено","deadline":"2025-11-01T18:00:00+07:00","isExecutor":true},{"id":"264","title":"Согласовать договор РТКЛАУД","status":"5","statusText":"Выполнено","deadline":"2025-10-29T18:00:00+07:00","isExecutor":true},{"id":"272","title":"ИП Слащева  - ВИЛАВИ","status":"5","statusText":"Выполнено","deadline":null,"isExecutor":true},{"id":"298","title":"(IT) Этапы внедрения роли КИК","status":"5","statusText":"Выполнено","deadline":null,"isExecutor":false},{"id":"325","title":"ИВАДЖО - VLV KZ","status":"5","statusText":"Выполнено","deadline":"2025-11-21T18:00:00+07:00","isExecutor":true},{"id":"327","title":"Артлайф-Вилави","status":"5","statusText":"Выполнено","deadline":"2025-12-12T18:00:00+07:00","isExecutor":true},{"id":"379","title":"Росхимия  - ВИЛАВИ","status":"5","statusText":"Выполнено","deadline":"2025-12-03T18:00:00+07:00","isExecutor":true},{"id":"395","title":"Проверка текста на возможность публикации","status":"5","statusText":"Выполнено","deadline":"2025-11-05T18:00:00+07:00","isExecutor":true},{"id":"399","title":"(ИМ 2.0) Проверка сайта 2.0 - разные домены","status":"2","statusText":"В ожидании","deadline":"2026-03-06T18:00:00+07:00","isExecutor":true},{"id":"417","title":"Подготовка к Стратегической сессии Vilavi 2.0","status":"2","statusText":"В ожидании","deadline":"2025-10-30T18:00:00+07:00","isExecutor":true},{"id":"501","title":"Армения: необходимость маркировки товаров для рынка","status":"5","statusText":"Выполнено","deadline":"2025-11-11T18:00:00+07:00","isExecutor":true},{"id":"529","title":"Подключение google pay и apple pay в эквайринге tiptop.","status":"5","statusText":"Выполнено","deadline":null,"isExecutor":true},{"id":"533","title":"БЕРНС  - ВИЛАВИ","status":"5","statusText":"Выполнено","deadline":"2025-12-01T18:00:00+07:00","isExecutor":true},{"id":"641","title":"МедБазис - ВИЛАВИ","status":"5","statusText":"Выполнено","deadline":"2025-11-11T18:00:00+07:00","isExecutor":true},{"id":"739","title":"ФУДМИ ЛАБ (новоленд) - ВИЛАВИ","status":"5","statusText":"Выполнено","deadline":"2025-12-02T18:00:00+07:00","isExecutor":true},{"id":"969","title":"Поиск альтернативных/дополнительных мер воздействия на селлеров","status":"5","statusText":"Выполнено","deadline":"2025-12-29T18:00:00+07:00","isExecutor":true},{"id":"1067","title":"Армения: допсоглашение на изменение срока оплаты","status":"5","statusText":"Выполнено","deadline":"2025-11-12T18:00:00+07:00","isExecutor":true},{"id":"1081","title":"Договор Борисенко Вилави","status":"2","statusText":"В ожидании","deadline":"2026-04-30T18:00:00+07:00","isExecutor":true},{"id":"1241","title":"Удаление контракта Клиента","status":"5","statusText":"Выполнено","deadline":"2025-12-12T18:00:00+07:00","isExecutor":true},{"id":"1557","title":"регистрация товарных знаков в Казахстане","status":"3","statusText":"В работе","deadline":"2026-08-28T18:00:00+07:00","isExecutor":true},{"id":"1563","title":"Продление регистрации товарных знаков","status":"5","statusText":"Выполнено","deadline":"2026-01-31T18:00:00+07:00","isExecutor":true},{"id":"1671","title":"(LD) Согласование коротких наименований для карточке в ИМ 2.0","status":"5","statusText":"Выполнено","deadline":"2025-12-12T18:00:00+07:00","isExecutor":true},{"id":"1677","title":"Турция: договор поставки товаров","status":"2","statusText":"В ожидании","deadline":"2026-03-31T18:00:00+07:00","isExecutor":true}]},"12":{"name":"Директор 12","role":"Director","asExecutor":{"total":2,"completed":2,"inProgress":0,"pending":0},"asCreator":{"total":2,"completed":1,"inProgress":0,"pending":1},"totalWorkload":4,"tasks":[{"id":"60","title":"Бюджет на Ноябрь 2025. Клиентский отдел.","status":"5","statusText":"Выполнено","deadline":"2025-10-29T18:00:00+07:00","isExecutor":true},{"id":"433","title":"Подготовка к Стратегической сессии Vilavi 2.0","status":"5","statusText":"Выполнено","deadline":"2025-10-30T18:00:00+07:00","isExecutor":true},{"id":"999","title":"Клиентский сервис изменения ЗП и KPI","status":"2","statusText":"В ожидании","deadline":null,"isExecutor":false},{"id":"1077","title":"(AM) Партнерам не приходит СМС с кодом","status":"5","statusText":"Выполнено","deadline":"2026-02-28T18:00:00+07:00","isExecutor":false}]},"30":{"name":"Директор 30","role":"Director","asExecutor":{"total":2,"completed":2,"inProgress":0,"pending":0},"asCreator":{"total":2,"completed":1,"inProgress":0,"pending":1},"totalWorkload":4,"tasks":[{"id":"78","title":"Бюджет на Ноябрь 2025. HR","status":"5","statusText":"Выполнено","deadline":"2025-10-28T18:00:00+07:00","isExecutor":true},{"id":"256","title":"Установить 1С , создать клиента","status":"5","statusText":"Выполнено","deadline":"2025-11-07T18:00:00+07:00","isExecutor":false},{"id":"429","title":"Подготовка к Стратегической сессии Vilavi 2.0","status":"5","statusText":"Выполнено","deadline":"2025-10-30T18:00:00+07:00","isExecutor":true},{"id":"1113","title":"Прием, увольнение, KPI службы персонала","status":"2","statusText":"В ожидании","deadline":null,"isExecutor":false}]},"16":{"name":"Директор 16","role":"Director","asExecutor":{"total":4,"completed":3,"inProgress":0,"pending":1},"asCreator":{"total":5,"completed":3,"inProgress":0,"pending":2},"totalWorkload":9,"tasks":[{"id":"437","title":"Подготовка к Стратегической сессии Vilavi 2.0","status":"5","statusText":"Выполнено","deadline":"2025-10-30T18:00:00+07:00","isExecutor":true},{"id":"513","title":"[ФРЗ] Предзаказ на франшизном складе (вариант ТЗ №2)","status":"2","statusText":"В ожидании","deadline":null,"isExecutor":false},{"id":"935","title":"Отчет по ВГХ для складов фрзи и не только","status":"5","statusText":"Выполнено","deadline":"2025-11-11T18:00:00+07:00","isExecutor":false},{"id":"945","title":"Прием и увольнение сотрудников, согласование з/п и премий","status":"2","statusText":"В ожидании","deadline":null,"isExecutor":true},{"id":"1715","title":"(LOG) Запуск региона Белоруссия - франшизы, основной склад, маркировка, доставка","status":"5","statusText":"Выполнено","deadline":"2026-02-27T18:00:00+07:00","isExecutor":true},{"id":"1723","title":"Договор на поставку и монтаж СКУД и видео наблюдения в офисе","status":"5","statusText":"Выполнено","deadline":"2025-11-28T18:00:00+07:00","isExecutor":true}]},"427":{"name":"Директор 427","role":"Director","asExecutor":{"total":0,"completed":0,"inProgress":0,"pending":0},"asCreator":{"total":0,"completed":0,"inProgress":0,"pending":0},"totalWorkload":0,"tasks":[]}};
+
+        renderDashboard(embeddedData);
     </script>
 </body>
 </html>
