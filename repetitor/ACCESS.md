@@ -29,7 +29,8 @@
 
 ## 5. kartunov.space
 - DNS: `194.34.238.17` (другой сервер), отдаёт nginx/1.24.0 (Ubuntu), HTTP 200.
-- Вход на `194.34.238.17`, способ деплоя, панель, git — не проверено.
+- Вход на `194.34.238.17` РАБОТАЕТ: `root`, порт 22, ключ `~/.ssh/id_ed25519_new_server`, hostname `12700.example.de` (вероятно, сервер «в Германии»). Ключи `id_ed25519` и `id_ed25519_vilavi_server` туда не подходят (Permission denied).
+- Способ деплоя, конфиг nginx, git — не проверено.
 - На Mac mini есть launchd `space.kartunov.*` (claude-proxy-http, podcast-review).
 
 ## 6. Туннели к/через сервер
@@ -40,6 +41,6 @@
 
 ## Не проверено / дальше
 1. DNS `hermes.vilavi.tech` и кто отдаёт `/repetitor/` (порты 8080/8081/8082/8501 на сервере или `194.34.238.17`).
-2. Вход на `194.34.238.17` и деплой kartunov.space.
+2. Деплой kartunov.space и конфиг nginx на `194.34.238.17` (вход есть).
 3. Доступы Hermes по пунктам (ключи, БД, Google, Telegram).
 4. Содержимое `~/sshd-tunnel`, `~/.hermes/hermes_gateway.sh`.
