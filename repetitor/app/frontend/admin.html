@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repetitor — Админ-панель</title>
+<style>
+:root {
+  --bg: #0f1020;
+  --surface: #181a30;
+  --surface2: #232547;
+  --border: #2a2c4d;
+  --text: #e8e9f3;
+  --text2: #9ca3c4;
+  --accent: #8b5cf6;
+  --success: #10b981;
+  --error: #ef4444;
+  --warn: #f59e0b;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); }
+.app { max-width: 1400px; margin: 0 auto; padding: 20px; }
+@media (max-width: 600px) { .app { padding: 10px; } }
+h1 { font-size: 24px; margin-bottom: 4px; }
+@media (max-width: 600px) { h1 { font-size: 20px; } }
+h2 { font-size: 18px; margin: 24px 0 12px; }
+.subtitle { color: var(--text2); margin-bottom: 20px; font-size: 14px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex-shrink: 0; }
+.tabs::-webkit-scrollbar { display: none; }
+@media (max-width: 600px) { .tabs { gap: 2px; margin-bottom: 12px; } }
+.tab { padding: 10px 16px; cursor: pointer; border: none; background: transparent; color: var(--text2); font-size: 14px; border-bottom: 2px solid transparent; white-space: nowrap; flex-shrink: 0; }
+@media (max-width: 600px) { .tab { padding: 10px 12px; font-size: 13px; } }
+.tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.tab:hover { color: var(--text); }
+.panel { display: none; }
+.panel.active { display: block; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+@media (max-width: 600px) { .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+@media (max-width: 600px) { .stat { padding: 12px; } }
+.stat .v { font-size: 28px; font-weight: 700; color: var(--accent); }
+@media (max-width: 600px) { .stat .v { font-size: 22px; } }
+.stat .l { font-size: 12px; color: var(--text2); margin-top: 4px; }
+.search-row { display: flex; gap: 8px; margin-bottom: 16px; }
+@media (max-width: 600px) { .search-row { flex-wrap: wrap; } .search-row input { flex: 1 1 100%; } }
+input[type=text], input[type=email], input[type=number], input[type=password] {
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+  padding: 8px 12px; border-radius: 8px; font-family: inherit; font-size: 14px;
+}
+input:focus { outline: none; border-color: var(--accent); }
+button, .btn {
+  background: var(--accent); color: white; border: none; padding: 8px 14px;
+  border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500;
+}
+button:hover { opacity: 0.9; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-danger { background: var(--error); }
+.btn-warn { background: var(--warn); }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+@media (max-width: 600px) { table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+@media (max-width: 600px) { th, td { padding: 8px 8px; font-size: 12px; } }
+th { background: var(--surface2); color: var(--text2); font-weight: 600; text-transform: uppercase; font-size: 11px; }
+tr:last-child td { border-bottom: none; }
+tr:hover { background: var(--surface2); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.badge-admin { background: rgba(139, 92, 246, 0.2); color: var(--accent); }
+.badge-trial { background: rgba(245, 158, 11, 0.2); color: var(--warn); }
+.badge-sub { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+.badge-expired { background: rgba(239, 68, 68, 0.2); color: var(--error); }
+.badge-inactive { background: rgba(156, 163, 196, 0.2); color: var(--text2); }
+.user-actions { display: flex; gap: 4px; flex-wrap: wrap; }
+.message-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+.message-card.user { border-left: 3px solid var(--accent); }
+.message-card.assistant { border-left: 3px solid var(--success); }
+.message-card .meta { font-size: 11px; color: var(--text2); margin-bottom: 6px; display: flex; gap: 8px; align-items: center; }
+.message-card .content { white-space: pre-wrap; font-size: 13px; line-height: 1.5; }
+.login-box { max-width: 400px; margin: 80px auto; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 30px; }
+@media (max-width: 600px) { .login-box { margin: 40px auto; padding: 20px; } }
+.login-box h1 { text-align: center; margin-bottom: 24px; }
+@media (max-width: 600px) { .login-box h1 { font-size: 20px; } }
+.login-box input { width: 100%; margin-bottom: 12px; }
+.login-box button { width: 100%; padding: 12px; }
+.error { background: rgba(239, 68, 68, 0.15); color: var(--error); padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; }
+.session-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; font-size: 13px; }
+@media (max-width: 600px) { .session-bar { flex-wrap: wrap; gap: 8px; padding: 10px; } }
+.session-bar .user-info { display: flex; align-items: center; gap: 10px; }
+.user-detail { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+.user-detail h3 { margin-bottom: 8px; }
+.actions-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.stat-big { background: linear-gradient(135deg, var(--surface), var(--surface2)); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+@media (max-width: 600px) { .stat-big { padding: 14px; } }
+.stat-big .label { font-size: 13px; color: var(--text2); }
+.stat-big .value { font-size: 32px; font-weight: 700; color: var(--accent); margin-top: 4px; }
+@media (max-width: 600px) { .stat-big .value { font-size: 26px; } }
+.stat-big .detail { font-size: 12px; color: var(--text2); margin-top: 4px; }
+/* === Analytics === */
+.analytics-grid { display: grid; gap: 16px; }
+.analytics-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+@media (max-width: 600px) { .analytics-card { padding: 12px; } }
+.analytics-card h3 { margin-bottom: 10px; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+.analytics-card .desc { color: var(--text2); font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+.analytics-card .evidence { background: rgba(139,92,246,0.08); border-left: 3px solid var(--accent); padding: 8px 12px; margin: 6px 0; font-size: 12px; color: var(--text); border-radius: 4px; }
+.analytics-card .evidence .item { font-weight: 600; color: var(--accent); margin-right: 6px; }
+.subject-bar { background: var(--surface2); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; cursor: pointer; }
+.subject-bar:hover { background: rgba(139,92,246,0.15); }
+.subject-bar .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.subject-bar .name { font-weight: 600; }
+.subject-bar .bar { height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; display: flex; }
+.subject-bar .bar .ok { background: var(--success); }
+.subject-bar .bar .bad { background: var(--error); }
+.subject-bar .bar .neutral { background: var(--text2); }
+.subject-bar .meta { color: var(--text2); font-size: 11px; margin-top: 4px; }
+.topic-chip { display: inline-block; background: var(--surface2); padding: 4px 10px; border-radius: 12px; font-size: 12px; margin: 2px; }
+.topic-chip.success { background: rgba(16,185,129,0.2); color: var(--success); }
+.topic-chip.struggle { background: rgba(239,68,68,0.2); color: var(--error); }
+.profile-chip { display: inline-block; padding: 4px 10px; border-radius: 10px; font-size: 12px; background: var(--surface2); margin: 2px 4px 2px 0; }
+.profile-chip.filled { background: rgba(16,185,129,0.2); color: var(--success); }
+.profile-chip.missing { background: rgba(239,68,68,0.15); color: var(--error); }
+.insight-meta { font-size: 11px; color: var(--text2); margin-top: 6px; }
+/* === Modal forms (replaces window.prompt) === */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.modal h2 { margin-bottom: 4px; font-size: 18px; }
+.modal .modal-sub { color: var(--text2); font-size: 13px; margin-bottom: 16px; }
+.modal .field { margin-bottom: 12px; }
+.modal .field label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.modal .field input, .modal .field select, .modal .field textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+}
+.modal .field input:focus, .modal .field select:focus, .modal .field textarea:focus { outline: none; border-color: var(--accent); }
+.modal .field textarea { min-height: 60px; resize: vertical; }
+.modal .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 500px) { .modal .row-2 { grid-template-columns: 1fr; gap: 8px; } }
+.modal .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+@media (max-width: 500px) { .modal .row-3 { grid-template-columns: 1fr; gap: 8px; } }
+.modal .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.modal .actions .btn { padding: 10px 18px; white-space: nowrap; }
+.modal .actions .btn-secondary { padding: 10px 18px; white-space: nowrap; }
+.modal .actions .btn-danger { padding: 10px 18px; white-space: nowrap; }
+.modal .err { background: rgba(239,68,68,0.15); color: var(--error); padding: 8px 12px; border-radius: 8px; margin-bottom: 10px; font-size: 13px; display: none; }
+.modal .err.show { display: block; }
+.modal .help { font-size: 11px; color: var(--text2); margin-top: 4px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-pick { padding: 8px 14px; background: var(--surface2); border: 2px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 13px; transition: 0.15s; }
+.chip-pick:hover { border-color: var(--accent); }
+.chip-pick.active { border-color: var(--accent); background: rgba(139,92,246,0.18); }
+.info-line { font-size: 12px; color: var(--text2); padding: 6px 10px; background: var(--surface2); border-radius: 6px; margin-bottom: 8px; }
+.status-pill { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.status-pill.active { background: rgba(16,185,129,0.2); color: var(--success); }
+.status-pill.inactive { background: rgba(239,68,68,0.15); color: var(--error); }
+</style>
+</head>
+<body>
+<div class="app" id="root">
+  <!-- Login screen -->
+  <div class="login-box" id="loginBox">
+    <h1>🔐 Repetitor Admin</h1>
+    <div id="loginError"></div>
+    <input type="email" id="loginEmail" placeholder="Email" value="">
+    <input type="password" id="loginPassword" placeholder="Пароль" value="">
+    <button onclick="doLogin()">Войти</button>
+  </div>
+</div>
+
+
+<!-- ===== Modal: Create user ===== -->
+<div class="modal-backdrop" id="modalCreateUser" style="display:none">
+  <div class="modal">
+    <h2>👤 Новый ученик</h2>
+    <p class="modal-sub">Заполни данные — репетитор сразу начнёт отвечать с учётом пола и стиля обучения.</p>
+    <div class="err" id="mcu-err"></div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>Логин *</label>
+        <input type="text" id="mcu-username" placeholder="маша, petya2024" autocomplete="off">
+        <div class="help">3-32 символа, можно по-русски. Используется для входа.</div>
+      </div>
+      <div class="field">
+        <label>Класс *</label>
+        <select id="mcu-grade">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+          <option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
+          <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="10">10</option><option value="11">11</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>Имя для отображения</label>
+        <input type="text" id="mcu-name" placeholder="Маша">
+      </div>
+      <div class="field">
+        <label>Пол</label>
+        <div class="chip-row" id="mcu-gender">
+          <div class="chip-pick" data-g="">⚪ не указан</div>
+          <div class="chip-pick" data-g="f">👧 девочка</div>
+          <div class="chip-pick" data-g="m">👦 мальчик</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Стиль обучения</label>
+      <div class="chip-row" id="mcu-style">
+        <div class="chip-pick" data-s="">⚪ не указан</div>
+        <div class="chip-pick" data-s="visual">🎨 Визуал</div>
+        <div class="chip-pick" data-s="auditory">🎧 Аудиал</div>
+        <div class="chip-pick" data-s="kinesthetic">✋ Кинестетик</div>
+        <div class="chip-pick" data-s="mixed">🔀 Смешанный</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Заметка о ребёнке</label>
+      <textarea id="mcu-note" placeholder="Например: любит Minecraft, плохо даётся таблица умножения"></textarea>
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>Пароль *</label>
+        <input type="text" id="mcu-password" placeholder="Минимум 4 символа" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label>Дней триала</label>
+        <input type="number" id="mcu-trial" value="14" min="0" max="365">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-secondary" id="mcu-cancel">Отмена</button>
+      <button id="mcu-save">Создать</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Modal: User actions (extend, change role, password, deactivate, view analytics) ===== -->
+<div class="modal-backdrop" id="modalUserActions" style="display:none">
+  <div class="modal" style="max-width:620px;">
+    <h2 id="mua-title">Управление учеником</h2>
+    <div class="modal-sub" id="mua-sub"></div>
+    <div class="err" id="mua-err"></div>
+
+    <div class="info-line" id="mua-info"></div>
+
+    <div class="actions">
+      <button class="btn-secondary" id="mua-cancel">Закрыть</button>
+      <button class="btn-danger" id="mua-deactivate">🚫 Деактивировать</button>
+      <button id="mua-reactivate" style="display:none">✅ Активировать</button>
+      <button id="mua-toggle-role">⬆️ Сделать админом</button>
+      <button class="btn-secondary" id="mua-change-pass">🔑 Сменить пароль</button>
+      <button id="mua-extend-30">+30 дней подписки</button>
+      <button id="mua-extend-90">+90 дней</button>
+      <button id="mua-extend-365">+365 дней</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Modal: Change password ===== -->
+<div class="modal-backdrop" id="modalChangePass" style="display:none">
+  <div class="modal" style="max-width:420px;">
+    <h2>🔑 Новый пароль</h2>
+    <div class="modal-sub" id="mcp-sub"></div>
+    <div class="err" id="mcp-err"></div>
+    <div class="field">
+      <label>Новый пароль</label>
+      <input type="text" id="mcp-password" autocomplete="new-password">
+      <div class="help">Минимум 4 символа. Сообщи ребёнку лично.</div>
+    </div>
+    <div class="field">
+      <label>Подтверждение</label>
+      <input type="text" id="mcp-password2" autocomplete="new-password">
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" id="mcp-cancel">Отмена</button>
+      <button id="mcp-save">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Modal: Edit profile ===== -->
+<div class="modal-backdrop" id="modalEditProfile" style="display:none">
+  <div class="modal">
+    <h2>✏️ Редактировать профиль</h2>
+    <div class="modal-sub" id="mep-sub"></div>
+    <div class="err" id="mep-err"></div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>Имя</label>
+        <input type="text" id="mep-name" placeholder="Маша">
+      </div>
+      <div class="field">
+        <label>Пол</label>
+        <div class="chip-row" id="mep-gender">
+          <div class="chip-pick" data-g="">⚪ не указан</div>
+          <div class="chip-pick" data-g="f">👧 девочка</div>
+          <div class="chip-pick" data-g="m">👦 мальчик</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>Класс</label>
+        <select id="mep-grade">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+          <option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
+          <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+          <option value="10">10</option><option value="11">11</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Стиль обучения</label>
+        <div class="chip-row" id="mep-style">
+          <div class="chip-pick" data-s="">⚪ не указан</div>
+          <div class="chip-pick" data-s="visual">🎨 Визуал</div>
+          <div class="chip-pick" data-s="auditory">🎧 Аудиал</div>
+          <div class="chip-pick" data-s="kinesthetic">✋ Кинестетик</div>
+          <div class="chip-pick" data-s="mixed">🔀 Смешанный</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Заметка</label>
+      <textarea id="mep-note" placeholder="Дополнительная информация о ребёнке"></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn-secondary" id="mep-cancel">Отмена</button>
+      <button id="mep-save">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Modal: Extend subscription (custom days) ===== -->
+<div class="modal-backdrop" id="modalExtend" style="display:none">
+  <div class="modal" style="max-width:380px;">
+    <h2>⏳ Продлить подписку</h2>
+    <div class="modal-sub" id="mex-sub"></div>
+    <div class="err" id="mex-err"></div>
+    <div class="field">
+      <label>Дней</label>
+      <input type="number" id="mex-days" value="30" min="1" max="365">
+    </div>
+    <div class="field">
+      <label>Примечание (необязательно)</label>
+      <input type="text" id="mex-note" placeholder="продлено админом">
+    </div>
+    <div class="actions">
+      <button class="btn-secondary" id="mex-cancel">Отмена</button>
+      <button id="mex-save">Продлить</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '/repetitor-api';
+var sessionToken = localStorage.getItem('rp_admin_token');
+var currentUser = null;
+
+// ============ Auth ============
+async function api(path, opts = {}) {
+  const headers = opts.headers || {};
+  if (sessionToken) headers['Authorization'] = 'Bearer ' + sessionToken;
+  if (opts.body && typeof opts.body === 'object' && !(opts.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(opts.body);
+  }
+  const r = await fetch(API + path, { ...opts, headers });
+  if (r.status === 401) {
+    showLogin();
+    throw new Error('not authenticated');
+  }
+  if (!r.ok) {
+    const t = await r.text();
+    throw new Error(`HTTP ${r.status}: ${t.slice(0, 200)}`);
+  }
+  return r.json();
+}
+
+function showLogin() {
+  localStorage.removeItem('rp_admin_token');
+  currentUser = null;
+  document.getElementById('root').innerHTML = `
+    <div class="login-box" id="loginBox">
+      <h1>🔐 Repetitor Admin</h1>
+      <div id="loginError"></div>
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Пароль">
+      <button onclick="doLogin()">Войти</button>
+    </div>
+  `;
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.innerHTML = '';
+  try {
+    const r = await fetch(API + '/api/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password}),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || 'login failed');
+    sessionToken = data.session_token;
+    localStorage.setItem('rp_admin_token', sessionToken);
+    currentUser = data.user;
+    if (currentUser.role !== 'admin') {
+      errEl.innerHTML = '<div class="error">Этот аккаунт не админ</div>';
+      return;
+    }
+    showApp();
+  } catch (e) {
+    errEl.innerHTML = '<div class="error">' + e.message + '</div>';
+  }
+}
+
+// ============ App ============
+function showApp() {
+  document.getElementById('root').innerHTML = `
+    <div class="session-bar">
+      <div class="user-info">
+        <strong>${currentUser.email}</strong>
+        <span class="badge badge-admin">admin</span>
+      </div>
+      <button class="btn-secondary" id="goRepetitorBtn" onclick="location.href='index.html'">🎓 Репититор</button>
+      <button class="btn-secondary" onclick="showLogin()">Выйти</button>
+    </div>
+    <h1>Repetitor — Админ-панель</h1>
+    <div class="subtitle">Пользователи, логи, подписки</div>
+    <div class="tabs">
+      <button class="tab active" data-tab="overview" onclick="showTab('overview')">Обзор</button>
+      <button class="tab" data-tab="users" onclick="showTab('users')">Пользователи</button>
+      <button class="tab" data-tab="logs" onclick="showTab('logs')">Логи</button>
+      <button class="tab" data-tab="analytics" onclick="showTab('analytics')">Аналитика</button>
+    </div>
+    <div class="panel active" id="panel-overview"></div>
+    <div class="panel" id="panel-users"></div>
+    <div class="panel" id="panel-logs"></div>
+    <div class="panel" id="panel-analytics"></div>
+  `;
+  // Restore last tab
+  const saved = localStorage.getItem('rp_admin_tab') || 'overview';
+  showTab(saved);
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  localStorage.setItem('rp_admin_tab', name);
+  if (location.hash !== '#tab-' + name) history.replaceState(null, '', '#tab-' + name);
+  if (name === 'overview') loadOverview();
+  else if (name === 'users') loadUsers();
+  else if (name === 'logs') loadLogs();
+  else if (name === 'analytics') loadAnalytics();
+}
+
+// ============ Overview ============
+async function loadOverview() {
+  const el = document.getElementById('panel-overview');
+  el.innerHTML = '<div class="subtitle">Загружаю статистику…</div>';
+  try {
+    const stats = await api('/api/admin/stats');
+    const days = stats.recent_7d_users;
+    el.innerHTML = `
+      <div class="stat-big">
+        <div class="label">Пользователей всего</div>
+        <div class="value">${stats.total_users}</div>
+        <div class="detail">+${days} за последние 7 дней</div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="v">${stats.active_trials}</div>
+          <div class="l">На trial-периоде</div>
+        </div>
+        <div class="stat">
+          <div class="v">${stats.active_subs}</div>
+          <div class="l">Активная подписка</div>
+        </div>
+        <div class="stat">
+          <div class="v">${stats.expired}</div>
+          <div class="l">Истёкших</div>
+        </div>
+        <div class="stat">
+          <div class="v">${stats.total_messages}</div>
+          <div class="l">Сообщений (диалогов)</div>
+        </div>
+        <div class="stat">
+          <div class="v">${stats.user_messages}</div>
+          <div class="l">Вопросов от пользователей</div>
+        </div>
+        <div class="stat">
+          <div class="v">${stats.recent_7d_messages}</div>
+          <div class="l">Сообщений за 7 дней</div>
+        </div>
+        <div class="stat">
+          <div class="v" style="color: var(--success)">${stats.rated_up}</div>
+          <div class="l">👍 положительных</div>
+        </div>
+        <div class="stat">
+          <div class="v" style="color: var(--error)">${stats.rated_down}</div>
+          <div class="l">👎 отрицательных</div>
+        </div>
+        <div class="stat">
+          <div class="v">${stats.satisfaction_pct !== null ? stats.satisfaction_pct + '%' : '—'}</div>
+          <div class="l">Удовлетворённость</div>
+        </div>
+      </div>
+    `;
+  } catch (e) {
+    el.innerHTML = '<div class="error">Ошибка: ' + e.message + '</div>';
+  }
+}
+
+// ============ Users ============
+var allUsers = [];
+var userFilter = '';
+
+async function loadUsers() {
+  const el = document.getElementById('panel-users');
+  el.innerHTML = '<div class="subtitle">Загружаю…</div>';
+  try {
+    const data = await api('/api/admin/users?limit=200&search=' + encodeURIComponent(userFilter));
+    allUsers = data.users;
+    el.innerHTML = renderUsersTable();
+  } catch (e) {
+    el.innerHTML = '<div class="error">Ошибка: ' + e.message + '</div>';
+  }
+}
+
+function renderUsersTable() {
+  const rows = allUsers.map(u => {
+    const access_badge = u.role === 'admin' ? 'badge-admin' :
+      u.access_reason === 'subscription' ? 'badge-sub' :
+      u.access_reason === 'trial' ? 'badge-trial' :
+      'badge-expired';
+    const access_label = u.role === 'admin' ? 'admin' :
+      u.access_reason === 'subscription' ? 'sub' :
+      u.access_reason === 'trial' ? 'trial' :
+      u.access_reason === 'deactivated' ? 'deact' : 'expired';
+    const sub_until = u.subscription_until ? new Date(u.subscription_until * 1000).toLocaleDateString('ru-RU') : '—';
+    const trial_until = u.trial_until ? new Date(u.trial_until * 1000).toLocaleDateString('ru-RU') : '—';
+    const last_login = u.last_login_at ? new Date(u.last_login_at * 1000).toLocaleString('ru-RU', {dateStyle: 'short', timeStyle: 'short'}) : '—';
+    const created = new Date(u.created_at * 1000).toLocaleDateString('ru-RU');
+    const login = u.username || u.email;  // prefer human-friendly username
+    return `<tr data-user-id="${u.id}">
+      <td><strong>#${u.id}</strong> ${login}</td>
+      <td>${u.display_name || '—'}</td>
+      <td><span class="badge ${access_badge}">${access_label}</span></td>
+      <td>${u.role}</td>
+      <td>${trial_until}</td>
+      <td>${sub_until}</td>
+      <td>${u.child_grade || 4} кл.</td>
+      <td>${last_login}</td>
+      <td>${created}</td>
+      <td>${u.is_active ? '✓' : '✗'}</td>
+      <td class="user-actions">
+        <button class="btn-sm" onclick="showUserActions(${u.id})">⋯</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `
+    <div class="search-row">
+      <input type="text" id="userSearch" placeholder="Поиск по логину или имени" value="${userFilter}" onkeyup="if(event.key==='Enter'){userFilter=this.value;loadUsers();}">
+      <button class="btn-secondary" onclick="userFilter='';loadUsers();">Сброс</button>
+      <button class="btn-secondary" onclick="loadUsers()">↻ Обновить</button>
+      <button onclick="showCreateUser()">+ Создать пользователя</button>
+    </div>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Логин / ID</th>
+            <th>Имя</th>
+            <th>Доступ</th>
+            <th>Роль</th>
+            <th>Trial до</th>
+            <th>Sub до</th>
+            <th>Класс</th>
+            <th>Последний вход</th>
+            <th>Создан</th>
+            <th>Активен</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+// ============ Modal: Create user ============
+var createGenderPick = '';
+var createStylePick = '';
+var currentActionUser = null;
+
+function openCreateUserModal() {
+  document.getElementById('mcu-username').value = '';
+  document.getElementById('mcu-name').value = '';
+  document.getElementById('mcu-password').value = '';
+  document.getElementById('mcu-note').value = '';
+  document.getElementById('mcu-trial').value = '14';
+  document.getElementById('mcu-grade').value = '4';
+  document.getElementById('mcu-err').classList.remove('show');
+  createGenderPick = '';
+  createStylePick = '';
+  applyChipSelection('mcu-gender', '', createGenderPick);
+  applyChipSelection('mcu-style', '', createStylePick);
+  document.getElementById('modalCreateUser').style.display = 'flex';
+  setTimeout(() => document.getElementById('mcu-username').focus(), 50);
+}
+
+function closeCreateUserModal() {
+  document.getElementById('modalCreateUser').style.display = 'none';
+}
+
+function applyChipSelection(containerId, attr, value) {
+  document.querySelectorAll('#' + containerId + ' .chip-pick').forEach(b => {
+    const v = b.getAttribute(attr);
+    if (v === value) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+}
+
+// Chip click handlers
+document.getElementById('mcu-gender').addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip-pick');
+  if (!chip) return;
+  createGenderPick = chip.dataset.g;
+  applyChipSelection('mcu-gender', 'data-g', createGenderPick);
+});
+document.getElementById('mcu-style').addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip-pick');
+  if (!chip) return;
+  createStylePick = chip.dataset.s;
+  applyChipSelection('mcu-style', 'data-s', createStylePick);
+});
+
+document.getElementById('mcu-cancel').addEventListener('click', closeCreateUserModal);
+document.getElementById('mcu-save').addEventListener('click', async () => {
+  const errEl = document.getElementById('mcu-err');
+  errEl.classList.remove('show');
+  const username = document.getElementById('mcu-username').value.trim().toLowerCase();
+  const name = document.getElementById('mcu-name').value.trim();
+  const password = document.getElementById('mcu-password').value;
+  const grade = parseInt(document.getElementById('mcu-grade').value);
+  const trialDays = parseInt(document.getElementById('mcu-trial').value);
+  const note = document.getElementById('mcu-note').value.trim();
+
+  if (!username || username.length < 3) return showModalErr(errEl, 'Логин минимум 3 символа');
+  if (username.length > 32) return showModalErr(errEl, 'Логин максимум 32 символа');
+  if (!/^[a-z0-9_.\-а-яё]+$/i.test(username)) {
+    return showModalErr(errEl, 'Только буквы (ru/en), цифры, _, ., -');
+  }
+  if (!password || password.length < 4) return showModalErr(errEl, 'Пароль минимум 4 символа');
+  if (!grade || grade < 1 || grade > 11) return showModalErr(errEl, 'Класс 1-11');
+  if (isNaN(trialDays) || trialDays < 0 || trialDays > 365) return showModalErr(errEl, 'Триал 0-365 дней');
+
+  const btn = document.getElementById('mcu-save');
+  btn.disabled = true;
+  btn.textContent = 'Создаю...';
+  try {
+    const r = await api('/api/admin/create_user', {
+      method: 'POST',
+      body: {
+        username,
+        password,
+        display_name: name || null,
+        gender: createGenderPick,
+        learning_style: createStylePick,
+        learning_style_note: note,
+        child_grade: grade,
+        trial_days: trialDays,
+      }
+    });
+    closeCreateUserModal();
+    showSuccessModal({
+      title: '✅ Ученик создан',
+      message:
+        `<div class="info-line"><b>Логин:</b> ${escapeHtml(r.user.username || r.user.email)}</div>` +
+        `<div class="info-line"><b>Пароль:</b> ${escapeHtml(password)}</div>` +
+        `<div class="info-line"><b>Имя:</b> ${escapeHtml(r.user.display_name || '—')}</div>` +
+        `<div class="info-line"><b>Класс:</b> ${r.user.child_grade}</div>` +
+        (r.user.trial_until
+          ? `<div class="info-line"><b>Триал до:</b> ${new Date(r.user.trial_until*1000).toLocaleDateString('ru-RU')}</div>`
+          : ''),
+      hint: 'Сообщи ребёнку логин и пароль.',
+    });
+    loadUsers();
+  } catch (e) {
+    showModalErr(errEl, e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Создать';
+  }
+});
+
+// Backwards-compat wrapper (used by inline onclick)
+function showCreateUser() { openCreateUserModal(); }
+
+
+// ============ Modal: User actions ============
+function showUserActions(userId) {
+  const u = allUsers.find(x => x.id === userId);
+  if (!u) return;
+  currentActionUser = u;
+
+  document.getElementById('mua-title').textContent =
+    `${u.role === 'admin' ? '👑 ' : '👤 '}${u.display_name || u.username || u.email}`;
+  document.getElementById('mua-sub').textContent = `${u.username || u.email} · ID ${u.id}`;
+
+  const trialTxt = u.trial_until ? new Date(u.trial_until*1000).toLocaleDateString('ru-RU') : '—';
+  const subTxt = u.subscription_until ? new Date(u.subscription_until*1000).toLocaleDateString('ru-RU') : '—';
+  const accessTxt = u.role === 'admin' ? 'admin (безлимит)'
+    : u.access_reason === 'subscription' ? 'подписка'
+    : u.access_reason === 'trial' ? 'триал'
+    : u.access_reason === 'deactivated' ? 'деактивирован' : 'истёк';
+  document.getElementById('mua-info').innerHTML =
+    `Роль: <b>${u.role}</b> · Статус: <span class="status-pill ${u.is_active ? 'active' : 'inactive'}">${u.is_active ? '✅ активен' : '🚫 выключен'}</span><br>` +
+    `Доступ: <b>${accessTxt}</b> · Класс: <b>${u.child_grade || 4}</b><br>` +
+    `Триал до: ${trialTxt} · Подписка до: ${subTxt}`;
+
+  // Toggle role button text
+  const roleBtn = document.getElementById('mua-toggle-role');
+  if (u.role === 'admin') {
+    roleBtn.textContent = '⬇️ Снять админа';
+  } else {
+    roleBtn.textContent = '⬆️ Сделать админом';
+  }
+
+  // Show / hide deactivate vs reactivate
+  document.getElementById('mua-deactivate').style.display = u.is_active ? '' : 'none';
+  document.getElementById('mua-reactivate').style.display = u.is_active ? 'none' : '';
+
+  document.getElementById('mua-err').classList.remove('show');
+  document.getElementById('modalUserActions').style.display = 'flex';
+}
+
+function closeUserActionsModal() {
+  document.getElementById('modalUserActions').style.display = 'none';
+}
+
+document.getElementById('mua-cancel').addEventListener('click', closeUserActionsModal);
+
+document.getElementById('mua-toggle-role').addEventListener('click', async () => {
+  if (!currentActionUser) return;
+  const u = currentActionUser;
+  const newRole = u.role === 'admin' ? 'user' : 'admin';
+  try {
+    await api('/api/admin/update_user', {method: 'POST', body: {user_id: u.id, role: newRole}});
+    showToast(`✅ Роль изменена: ${newRole}`);
+    closeUserActionsModal();
+    loadUsers();
+  } catch (e) {
+    showModalErr(document.getElementById('mua-err'), e.message);
+  }
+});
+
+document.getElementById('mua-deactivate').addEventListener('click', async () => {
+  if (!currentActionUser) return;
+  const u = currentActionUser;
+  if (!confirm('Точно деактивировать ' + (u.username || u.email) + '? Пользователь не сможет войти.')) return;
+  try {
+    await api('/api/admin/deactivate', {method: 'POST', body: {user_id: u.id, days: 0, note: 'admin'}});
+    showToast('🚫 Деактивирован');
+    closeUserActionsModal();
+    loadUsers();
+  } catch (e) {
+    showModalErr(document.getElementById('mua-err'), e.message);
+  }
+});
+
+document.getElementById('mua-reactivate').addEventListener('click', async () => {
+  if (!currentActionUser) return;
+  try {
+    await api('/api/admin/activate', {method: 'POST', body: {user_id: currentActionUser.id}});
+    showToast('✅ Активирован');
+    closeUserActionsModal();
+    loadUsers();
+  } catch (e) {
+    showModalErr(document.getElementById('mua-err'), e.message);
+  }
+});
+
+document.getElementById('mua-change-pass').addEventListener('click', () => {
+  if (!currentActionUser) return;
+  document.getElementById('mcp-password').value = '';
+  document.getElementById('mcp-password2').value = '';
+  document.getElementById('mcp-err').classList.remove('show');
+  document.getElementById('mcp-sub').textContent =
+    `Новый пароль для: ${currentActionUser.username || currentActionUser.email}`;
+  document.getElementById('modalChangePass').style.display = 'flex';
+  setTimeout(() => document.getElementById('mcp-password').focus(), 50);
+});
+
+document.getElementById('mcp-cancel').addEventListener('click', () => {
+  document.getElementById('modalChangePass').style.display = 'none';
+});
+
+document.getElementById('mcp-save').addEventListener('click', async () => {
+  if (!currentActionUser) return;
+  const errEl = document.getElementById('mcp-err');
+  const p1 = document.getElementById('mcp-password').value;
+  const p2 = document.getElementById('mcp-password2').value;
+  if (p1.length < 4) return showModalErr(errEl, 'Пароль минимум 4 символа');
+  if (p1 !== p2) return showModalErr(errEl, 'Пароли не совпадают');
+  try {
+    await api('/api/admin/set_password', {method: 'POST', body: {user_id: currentActionUser.id, password: p1}});
+    document.getElementById('modalChangePass').style.display = 'none';
+    showSuccessModal({
+      title: '🔑 Пароль изменён',
+      message:
+        `<div class="info-line"><b>Логин:</b> ${escapeHtml(currentActionUser.username || currentActionUser.email)}</div>` +
+        `<div class="info-line"><b>Новый пароль:</b> ${escapeHtml(p1)}</div>`,
+      hint: 'Сообщи ребёнку новый пароль.',
+    });
+  } catch (e) {
+    showModalErr(errEl, e.message);
+  }
+});
+
+async function extendSubscriptionQuick(days, btn) {
+  if (!currentActionUser) return;
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    const r = await api('/api/admin/extend', {method: 'POST', body: {
+      user_id: currentActionUser.id, days, note: 'extended from admin'
+    }});
+    showToast(`✅ Подписка продлена на ${days} дней (до ${new Date(r.new_subscription_until*1000).toLocaleDateString('ru-RU')})`);
+    closeUserActionsModal();
+    loadUsers();
+  } catch (e) {
+    showModalErr(document.getElementById('mua-err'), e.message);
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+document.getElementById('mua-extend-30').addEventListener('click', (e) => extendSubscriptionQuick(30, e.target));
+document.getElementById('mua-extend-90').addEventListener('click', (e) => extendSubscriptionQuick(90, e.target));
+document.getElementById('mua-extend-365').addEventListener('click', (e) => extendSubscriptionQuick(365, e.target));
+
+// ============ Logs ============
+var currentLogUserId = null;
+var allLogs = [];
+
+async function loadLogs() {
+  const el = document.getElementById('panel-logs');
+  el.innerHTML = '<div class="subtitle">Загружаю…</div>';
+  try {
+    const data = await api('/api/admin/logs?limit=100' + (currentLogUserId ? '&user_id=' + currentLogUserId : ''));
+    allLogs = data.logs;
+    el.innerHTML = renderLogs();
+  } catch (e) {
+    el.innerHTML = '<div class="error">Ошибка: ' + e.message + '</div>';
+  }
+}
+
+async function loadLogsForUser(userId) {
+  currentLogUserId = userId;
+  showTab('logs');
+  await loadLogs();
+}
+
+function renderLogs() {
+  const rows = allLogs.map(l => {
+    const time = new Date(l.created_at).toLocaleString('ru-RU', {dateStyle: 'short', timeStyle: 'medium'});
+    const role_class = l.role === 'user' ? 'user' : 'assistant';
+    const content = l.content.length > 300 ? l.content.slice(0, 300) + '…' : l.content;
+    const rating_icon = l.rating === 3 ? '👍' : l.rating === 1 ? '👎' : '';
+    return `<div class="message-card ${role_class}">
+      <div class="meta">
+        <span>#${l.id} · ${l.user_email || 'user#' + l.user_id}</span>
+        <span>·</span>
+        <span>${time}</span>
+        <span>·</span>
+        <span>${l.role === 'user' ? '👤 Вопрос' : '🤖 Ответ'}</span>
+        ${l.grade ? `<span>· ${l.grade} кл.</span>` : ''}
+        ${l.latency_ms ? `<span>· ${l.latency_ms}ms</span>` : ''}
+        ${l.kb_used ? '<span>· KB</span>' : ''}
+        ${rating_icon}
+      </div>
+      <div class="content">${escapeHtml(content)}</div>
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="search-row">
+      ${currentLogUserId ? `<button class="btn-secondary" onclick="currentLogUserId=null;loadLogs();">← Все пользователи</button>` : ''}
+      <button class="btn-secondary" onclick="loadLogs()">↻ Обновить</button>
+      <div style="flex: 1"></div>
+      <span style="color: var(--text2); font-size: 12px;">${allLogs.length} сообщений</span>
+    </div>
+    ${rows || '<div class="subtitle">Нет логов</div>'}
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+}
+
+// ============ Auto-login if token in storage ============
+(async () => {
+  if (sessionToken) {
+    try {
+      const data = await api('/api/auth/me');
+      currentUser = data.user;
+      if (currentUser.role === 'admin') showApp();
+      else showLogin();
+    } catch (e) {
+      showLogin();
+    }
+  }
+})();
+
+// ============ Analytics tab ============
+var analyticsData = null;
+var analyticsUsers = [];
+
+async function loadAnalytics() {
+  const el = document.getElementById('panel-analytics');
+  el.innerHTML = '<div class="subtitle">Загружаю список учеников…</div>';
+  try {
+    const data = await api('/api/admin/users?limit=200&search=' + encodeURIComponent(''));
+    analyticsUsers = (data.users || []).filter(u => u.role !== 'admin');
+    if (analyticsUsers.length === 0) {
+      el.innerHTML = '<div class="subtitle">Пока нет учеников. Создайте через вкладку «Пользователи».</div>';
+      return;
+    }
+    el.innerHTML = renderAnalyticsPicker();
+    // Auto-load first user
+    loadAnalyticsFor(analyticsUsers[0].id);
+  } catch (e) {
+    el.innerHTML = '<div class="error">Ошибка: ' + e.message + '</div>';
+  }
+}
+
+function renderAnalyticsPicker() {
+  const opts = analyticsUsers.map(u => {
+    const profileBadge = u.profile_completed_at
+      ? '<span class="profile-chip filled">профиль ✓</span>'
+      : '<span class="profile-chip missing">профиль ✗</span>';
+    return `<option value="${u.id}">${escapeHtml(u.username || u.email)}${profileBadge ? ' ' + profileBadge : ''} (${u.display_name || '—'})</option>`;
+  }).join('');
+  return `
+    <div class="search-row" style="display:flex; gap:8px; flex-wrap: wrap; align-items: center;">
+      <label style="font-size:13px; color:var(--text2);">Ученик:</label>
+      <select id="analyticsUserPick" style="min-width:300px;">${opts}</select>
+      <button onclick="loadAnalyticsFor(parseInt(document.getElementById('analyticsUserPick').value))">Показать</button>
+      <button class="btn-secondary" onclick="runInsightsNow()">🔄 Обновить аналитику</button>
+      <div style="flex:1"></div>
+      <span style="color:var(--text2); font-size:12px;">${analyticsUsers.length} ученик(ов)</span>
+    </div>
+    <div id="analyticsContent"><div class="subtitle">Выбери ученика…</div></div>
+  `;
+}
+
+async function loadAnalyticsFor(userId) {
+  const el = document.getElementById('analyticsContent');
+  if (!el) return;
+  el.innerHTML = '<div class="subtitle">Загружаю аналитику…</div>';
+  try {
+    const data = await api('/api/admin/student_analytics?user_id=' + userId);
+    analyticsData = data;
+    el.innerHTML = renderAnalytics(data);
+  } catch (e) {
+    el.innerHTML = '<div class="error">Ошибка: ' + e.message + '</div>';
+  }
+}
+
+function renderAnalytics(data) {
+  const u = data.user;
+  const s = data.summary;
+  const bySubj = data.by_subject || [];
+  const insights = data.insights || {};
+  const hardTopics = data.hard_topics || [];
+
+  const genderLabel = u.gender === 'f' ? '👧 девочка' : u.gender === 'm' ? '👦 мальчик' : '⚪ не указан';
+  const styleLabel = {
+    visual: '🎨 Визуал',
+    auditory: '🎧 Аудиал',
+    kinesthetic: '✋ Кинестетик',
+    mixed: '🔀 Смешанный',
+    reading: '📖 Чтец',
+  }[u.learning_style] || '⚪ не указан';
+
+  // Profile completeness
+  const profileComplete = u.profile_completed_at;
+  const chips = [
+    `Имя: ${u.display_name ? escapeHtml(u.display_name) : '—'}`,
+    genderLabel,
+    `Класс: ${u.child_grade}`,
+    styleLabel,
+  ];
+  if (u.learning_style_note) chips.push(`📝 ${escapeHtml(u.learning_style_note)}`);
+  const profileSection = `
+    <div class="analytics-card">
+      <h3>👤 Профиль ученика ${profileComplete ? '<span style="font-size:11px;color:var(--success)">✓ заполнен</span>' : '<span style="font-size:11px;color:var(--error)">не заполнен</span>'}</h3>
+      <div style="margin-bottom:8px;">${chips.map(c => `<span class="profile-chip ${profileComplete ? 'filled' : 'missing'}">${c}</span>`).join('')}</div>
+      <div style="display:flex; gap:6px; flex-wrap: wrap;">
+        <button class="btn-sm btn-secondary" onclick="openEditProfile(${u.id})">✏️ Редактировать профиль</button>
+      </div>
+    </div>
+  `;
+
+  // Summary stats
+  const summarySection = `
+    <div class="analytics-card">
+      <h3>📊 Общая статистика</h3>
+      <div style="display:flex; gap:24px; flex-wrap:wrap; margin-top:8px;">
+        <div><div style="font-size:28px; font-weight:700; color:var(--accent)">${s.total_messages}</div><div style="font-size:11px; color:var(--text2)">вопросов задано</div></div>
+        <div><div style="font-size:28px; font-weight:700; color:var(--success)">${s.total_success}</div><div style="font-size:11px; color:var(--text2)">👍 понял</div></div>
+        <div><div style="font-size:28px; font-weight:700; color:var(--error)">${s.total_struggle}</div><div style="font-size:11px; color:var(--text2)">👎 не понял</div></div>
+        <div><div style="font-size:28px; font-weight:700; color:var(--text)">${s.subjects_count}</div><div style="font-size:11px; color:var(--text2)">предметов</div></div>
+        <div><div style="font-size:28px; font-weight:700; color:var(--text)">${s.satisfaction_pct !== null ? s.satisfaction_pct + '%' : '—'}</div><div style="font-size:11px; color:var(--text2)">удовлетворённость</div></div>
+      </div>
+    </div>
+  `;
+
+  // Subjects breakdown
+  const subjectsHtml = bySubj.length === 0
+    ? '<div class="desc" style="color:var(--text2)">Ребёнок ещё не задавал вопросов. Аналитика появится после первых диалогов.</div>'
+    : bySubj.map(sb => {
+        const total = sb.total_messages;
+        const okPct = total ? Math.round(100 * sb.success / total) : 0;
+        const badPct = total ? Math.round(100 * sb.struggle / total) : 0;
+        const neutralPct = 100 - okPct - badPct;
+        const lastSeen = sb.last_seen_at ? new Date(sb.last_seen_at * 1000).toLocaleDateString('ru-RU') : '—';
+        const topicChips = (sb.topics || []).slice(0, 12).map(t => {
+          const cls = t.struggle > t.success ? 'struggle' : (t.success > 0 ? 'success' : '');
+          return `<span class="topic-chip ${cls}" title="сообщений: ${t.count}, 👍${t.success}, 👎${t.struggle}">${escapeHtml(t.topic)} <small>${t.count}</small></span>`;
+        }).join('');
+        return `
+          <div class="subject-bar">
+            <div class="top">
+              <div class="name">${escapeHtml(sb.subject)}</div>
+              <div style="font-size:12px; color:var(--text2)">${total} сообщ · ${lastSeen}</div>
+            </div>
+            <div class="bar">
+              <div class="ok" style="width:${okPct}%"></div>
+              <div class="neutral" style="width:${neutralPct}%"></div>
+              <div class="bad" style="width:${badPct}%"></div>
+            </div>
+            <div class="meta">👍 ${sb.success} · 👎 ${sb.struggle} · последняя активность: ${lastSeen}</div>
+            ${topicChips ? `<div style="margin-top:8px;">${topicChips}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+
+  // Insights — render each category as card
+  const insightCard = (cat, title, emoji) => {
+    const ins = insights[cat];
+    if (!ins) {
+      return `
+        <div class="analytics-card">
+          <h3>${emoji} ${title}</h3>
+          <div class="desc" style="color:var(--text2)">Пока недостаточно данных. Аналитика появится после ~5+ сообщений от ученика.</div>
+        </div>
+      `;
+    }
+    const det = (ins.details || []).map(d => `
+      <div class="evidence">
+        <span class="item">${escapeHtml(d.item || '')}</span>
+        ${escapeHtml(d.evidence || '')}
+      </div>
+    `).join('');
+    return `
+      <div class="analytics-card">
+        <h3>${emoji} ${title}</h3>
+        <div class="desc">${escapeHtml(ins.summary || '')}</div>
+        ${det ? `<div style="margin-top:10px;">${det}</div>` : ''}
+        <div class="insight-meta">На основе ${ins.messages_analyzed || '?'} сообщений · обновлено ${new Date(ins.generated_at * 1000).toLocaleString('ru-RU', {dateStyle:'short', timeStyle:'short'})}</div>
+      </div>
+    `;
+  };
+
+  // Hard topics
+  const hardHtml = hardTopics.length === 0
+    ? '<div class="desc" style="color:var(--text2)">Пока нет данных — ребёнок не ставил 👎 ни одному ответу.</div>'
+    : hardTopics.map(h => `
+        <div class="evidence">
+          <span class="item">${escapeHtml(h.subject)} · ${escapeHtml(h.topic)}</span>
+          ${h.attempts} попыток, ${h.failures} не понято · последняя: ${new Date(h.last_attempt_at * 1000).toLocaleDateString('ru-RU')}
+        </div>
+      `).join('');
+
+  const insightsSection = `
+    <div class="analytics-grid" style="margin-top: 16px;">
+      ${insightCard('interests', '🎯 Что интересно', '🎯')}
+      ${insightCard('strengths', '💪 В чём силён', '💪')}
+      ${insightCard('weaknesses', '🛠 Где нужна помощь', '🛠')}
+      ${insightCard('style', '🎓 Как лучше учить', '🎓')}
+      ${insightCard('overall', '📝 Общее резюме', '📝')}
+    </div>
+  `;
+
+  return `
+    ${profileSection}
+    ${summarySection}
+    <div class="analytics-card" style="margin-top:16px;">
+      <h3>📚 Предметы и темы</h3>
+      ${subjectsHtml}
+    </div>
+    ${insightsSection}
+    <div class="analytics-card" style="margin-top:16px;">
+      <h3>🔥 Сложные темы (больше всего 👎)</h3>
+      ${hardHtml}
+    </div>
+  `;
+}
+
+async function runInsightsNow() {
+  try {
+    await api('/api/admin/run_insights', {method: 'POST'});
+    alert('Аналитика запущена в фоне. Через 10-30 секунд нажми «Показать» ещё раз.');
+  } catch (e) {
+    alert('Ошибка: ' + e.message);
+  }
+}
+
+// ============ Modal: Edit profile ============
+var editProfileUserId = null;
+var editProfileGenderPick = '';
+var editProfileStylePick = '';
+
+function openEditProfile(userId) {
+  var u = analyticsData && analyticsData.user && analyticsData.user.id === userId ? analyticsData.user : null;
+  if (!u) {
+    // Fall back to looking up in allUsers
+    u = allUsers.find(x => x.id === userId);
+  }
+  if (!u) {
+    showToast('⚠️ Сначала загрузите список пользователей', 'error');
+    return;
+  }
+  editProfileUserId = userId;
+  editProfileGenderPick = u.gender || '';
+  editProfileStylePick = u.learning_style || '';
+
+  document.getElementById('mep-name').value = u.display_name || '';
+  document.getElementById('mep-grade').value = String(u.child_grade || 4);
+  document.getElementById('mep-note').value = u.learning_style_note || '';
+  document.getElementById('mep-sub').textContent =
+    `${u.username || u.email} · ID ${u.id}`;
+  document.getElementById('mep-err').classList.remove('show');
+  applyChipSelection('mep-gender', 'data-g', editProfileGenderPick);
+  applyChipSelection('mep-style', 'data-s', editProfileStylePick);
+  document.getElementById('modalEditProfile').style.display = 'flex';
+}
+
+document.getElementById('mep-gender').addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip-pick');
+  if (!chip) return;
+  editProfileGenderPick = chip.dataset.g;
+  applyChipSelection('mep-gender', 'data-g', editProfileGenderPick);
+});
+document.getElementById('mep-style').addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip-pick');
+  if (!chip) return;
+  editProfileStylePick = chip.dataset.s;
+  applyChipSelection('mep-style', 'data-s', editProfileStylePick);
+});
+document.getElementById('mep-cancel').addEventListener('click', () => {
+  document.getElementById('modalEditProfile').style.display = 'none';
+});
+document.getElementById('mep-save').addEventListener('click', async () => {
+  if (!editProfileUserId) return;
+  const errEl = document.getElementById('mep-err');
+  errEl.classList.remove('show');
+  const name = document.getElementById('mep-name').value.trim();
+  const grade = parseInt(document.getElementById('mep-grade').value);
+  const note = document.getElementById('mep-note').value.trim();
+  if (!grade || grade < 1 || grade > 11) return showModalErr(errEl, 'Класс 1-11');
+  try {
+    await api('/api/admin/update_profile', {
+      method: 'POST',
+      body: {
+        user_id: editProfileUserId,
+        display_name: name,
+        gender: editProfileGenderPick,
+        learning_style: editProfileStylePick,
+        learning_style_note: note,
+        child_grade: grade,
+      }
+    });
+    document.getElementById('modalEditProfile').style.display = 'none';
+    showToast('✅ Профиль обновлён');
+    if (analyticsData && analyticsData.user && analyticsData.user.id === editProfileUserId) {
+      loadAnalyticsFor(editProfileUserId);
+    }
+    loadUsers();
+  } catch (e) {
+    showModalErr(errEl, e.message);
+  }
+});
+
+// ============ Helpers: toast + modals ============
+function showModalErr(el, msg) {
+  if (!el) { alert(msg); return; }
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = `
+    position: fixed; bottom: 24px; right: 24px;
+    background: ${type === 'error' ? '#ef4444' : '#10b981'};
+    color: white; padding: 12px 20px; border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    z-index: 2000;
+    animation: slideInRight 0.3s ease-out;
+  `;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; }, 3000);
+  setTimeout(() => t.remove(), 3500);
+}
+
+function showSuccessModal({ title, message, hint, onClose }) {
+  // Reuse modalUserActions markup? Better create dynamic.
+  var modal = document.getElementById('modalSuccess');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.className = 'modal-backdrop';
+    modal.id = 'modalSuccess';
+    modal.innerHTML = `
+      <div class="modal" style="max-width:440px;">
+        <h2 id="ms-title"></h2>
+        <div class="modal-sub" id="ms-hint" style="color:var(--text2); font-size:13px;"></div>
+        <div id="ms-msg" style="margin: 12px 0;"></div>
+        <div class="actions">
+          <button id="ms-ok">OK</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.querySelector('#ms-ok').addEventListener('click', () => {
+      modal.style.display = 'none';
+      if (onClose) onClose();
+    });
+  }
+  modal.querySelector('#ms-title').textContent = title || 'Готово';
+  modal.querySelector('#ms-hint').textContent = hint || '';
+  modal.querySelector('#ms-msg').innerHTML = message || '';
+  modal.style.display = 'flex';
+}
+
+// Escape key closes all modals
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    ['modalCreateUser', 'modalUserActions', 'modalChangePass', 'modalEditProfile', 'modalExtend', 'modalSuccess'].forEach(id => {
+      const m = document.getElementById(id);
+      if (m) m.style.display = 'none';
+    });
+  }
+});
+
+// Click outside modal closes it
+['modalCreateUser', 'modalUserActions', 'modalChangePass', 'modalEditProfile', 'modalExtend'].forEach(id => {
+  const m = document.getElementById(id);
+  if (m) m.addEventListener('click', (e) => { if (e.target === m) m.style.display = 'none'; });
+});
+
+// Hash change restores tab (browser back/forward)
+window.addEventListener('hashchange', () => {
+  const match = location.hash.match(/^#tab-(.+)$/);
+  if (match && document.getElementById('panel-' + match[1])) showTab(match[1]);
+});
+</script>
+</body>
+</html>
