@@ -838,6 +838,28 @@ def _call_llm(system: str, user: str, temperature: float = 0.6, max_tokens: int 
     return _strip_think(r.choices[0].message.content)
 
 
+def _llm_json(system: str, user: str, temperature: float = 0.4, max_tokens: int = 3000, retries: int = 1) -> dict:
+    """Call the LLM expecting a JSON object. Tolerates ```json fences and extra prose;
+    retries once if the reply is empty (reasoning can eat the token budget)."""
+    last_err = None
+    for _ in range(retries + 1):
+        raw = _call_llm(system, user, temperature=temperature, max_tokens=max_tokens, json_mode=True)
+        text = (raw or '').strip()
+        if text.startswith('```'):
+            text = text.strip('`')
+            if text[:4].lower() == 'json':
+                text = text[4:]
+        start, end = text.find('{'), text.rfind('}')
+        if start != -1 and end > start:
+            try:
+                return json.loads(text[start:end + 1])
+            except Exception as e:
+                last_err = e
+        else:
+            last_err = ValueError('empty or non-JSON LLM reply')
+    raise last_err
+
+
 # ============ Background learning analytics ============
 
 INSIGHT_TRIGGER_MESSAGES = 5  # how many user msgs between analytics runs
@@ -936,8 +958,7 @@ def _generate_insights_for_user(user_id: int) -> None:
         user_prompt = f'Профиль ученика:\n{user_meta}\n\nПоследние {n_user_msgs} вопросов ученика:\n\n{transcript}'
 
         try:
-            raw = _call_llm(sys_prompt, user_prompt, temperature=0.4, max_tokens=1500, json_mode=True)
-            data = json.loads(raw)
+            data = _llm_json(sys_prompt, user_prompt, temperature=0.4, max_tokens=3000)
         except Exception as e:
             print(f'[insights] LLM error: {e}', flush=True)
             return
@@ -1128,7 +1149,7 @@ def auth_me(u: dict = Depends(require_user)):
     try:
         with db.get_conn() as c:
             row = c.execute(
-                "SELECT summary FROM learning_insights WHERE user_id = ? AND category = 'interests' ORDER BY updated_at DESC LIMIT 1",
+                "SELECT summary FROM learning_insights WHERE user_id = ? AND category = 'interests' ORDER BY generated_at DESC LIMIT 1",
                 (u['id'],)
             ).fetchone()
             if row and row['summary']:
