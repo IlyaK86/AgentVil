@@ -69,7 +69,12 @@
   - внешние сканеры бьют по `/metrics`, `/` (404) — шум.
 - kartunov.space: nginx server `kartunov.space`, root `/var/www/kartunov.space`; `/lead-ask/` -> 127.0.0.1:8098 (margin-offer-api); `/lead`, `/offer` редиректы. Деплой — копирование файлов в `/var/www/kartunov.space` (git/CI не проверялись).
 
+## 10. Фронт и деплой (проверено)
+- `/var/www/html/repetitor/`: ровно 2 файла — `index.html` (83 КБ, 2026-09-08) и `admin.html` (59 КБ, 2026-09-07). Одностраничный фронт, без сборки и без git.
+- `/var/www/kartunov.space/`: `index.html`, `offer.html`, `reglament.html`, `lead/`, `offer/`. Тоже не git; скриптов деплоя нет — правка файлов прямо на сервере.
+- Скрипты в `/root`: `conv_changes.sh`, `hermes-migrate-v0.20.0.sh`, `run_graphify.sh` (деплоя среди них нет). Соседние сайты в `/var/www/html`: `analyst`, `b24-secretary`, `project-manager`, `supply-chain`; у `index.html` есть бэкапы `.bak-*`.
+- Итог: деплой = редактирование/копирование файлов по SSH; версионирования нет ни у фронта, ни у бэкенда.
+
 ## Не проверено / дальше
-1. Фронт `/var/www/html/repetitor` (состав, git?) и `/var/www/kartunov.space` (git?), скрипты деплоя.
-2. Откуда LLM-ключи у `repetitor-api` (имена переменных).
-3. Доступы Hermes на Mac mini (`~/.hermes/.env` — только имена), `~/sshd-tunnel`, назначение ключей `id_ed25519_agent`, `tunnel_key`.
+1. Откуда LLM-ключи у `repetitor-api`; таблицы `data.db`.
+2. Доступы Hermes на Mac mini (`~/.hermes/.env` — только имена), `~/sshd-tunnel`, ключи `id_ed25519_agent`, `tunnel_key`.
