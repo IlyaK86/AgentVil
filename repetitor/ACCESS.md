@@ -39,8 +39,12 @@
 - Оба под launchd KeepAlive; в логах периодические «Broken pipe / Operation timed out», перезапускаются сами.
 - Туннель «снаружи к Mac mini» (reverse) не найден; запущен Tailscale. Есть папка `~/sshd-tunnel` (не изучалась).
 
+## 7. Где живёт репетитор (вывод)
+- DNS `hermes.vilavi.tech` -> `194.34.238.17` (тот же сервер, что kartunov.space; вход есть, ключ `id_ed25519_new_server`). Значит `/repetitor/` раздаётся с него, а НЕ с `147.45.147.124`.
+- На `147.45.147.124` порты 8080/8081/8082/8501 на `/repetitor/` не отвечают как сайт (000/404/404/301); сервисы VILAVI (hub, dashboard, Streamlit :8501). `/var/www/html` там: `reports`, `stock-risk.html`.
+
 ## Не проверено / дальше
-1. DNS `hermes.vilavi.tech` и кто отдаёт `/repetitor/` (порты 8080/8081/8082/8501 на сервере или `194.34.238.17`).
+1. Найти на `194.34.238.17` каталог/сервис `/repetitor/` (конфиг nginx, путь, процесс).
 2. Деплой kartunov.space и конфиг nginx на `194.34.238.17` (вход есть).
 3. Доступы Hermes по пунктам (ключи, БД, Google, Telegram).
 4. Содержимое `~/sshd-tunnel`, `~/.hermes/hermes_gateway.sh`.
