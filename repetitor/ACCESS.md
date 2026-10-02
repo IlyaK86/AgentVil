@@ -75,6 +75,19 @@
 - Скрипты в `/root`: `conv_changes.sh`, `hermes-migrate-v0.20.0.sh`, `run_graphify.sh` (деплоя среди них нет). Соседние сайты в `/var/www/html`: `analyst`, `b24-secretary`, `project-manager`, `supply-chain`; у `index.html` есть бэкапы `.bak-*`.
 - Итог: деплой = редактирование/копирование файлов по SSH; версионирования нет ни у фронта, ни у бэкенда.
 
+## 11. Доступы Hermes на Mac mini (только имена, значения не читались)
+`~/.hermes/.env` содержит переменные (статус «работает» не проверялся, проверено лишь наличие):
+- Bitrix24: `BITRIX_WEBHOOK_URL`, `BITRIX_MCP_URL`
+- Внешний API: `EXTERNAL_API_BASE_URL`, `EXTERNAL_API_TOKEN`
+- Локальный API/MCP: `WEBHOOK_PORT`, `API_SERVER_ENABLED`, `API_SERVER_HOST`, `API_SERVER_KEY`, `MCP_SERVER_PORT`
+- Telegram: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALLOWED_USERS`, `TELEGRAM_GROUP_ALLOWED_CHATS`, `TELEGRAM_FALLBACK_IPS`, таймауты `HERMES_TELEGRAM_HTTP_*`
+- LLM: `OPENROUTER_API_KEY`, `MINIMAX_API_KEY`, `OMNIROUTER_API_KEY` (`ANTHROPIC_API_KEY` закомментирован)
+- Прочее: `GITHUB_TOKEN` (git/Pi CLI), `MCP_STITCH_API_KEY`, `GARANT_TOKEN`, `OBSIDIAN_VAULT_PATH`
+- `~/.hermes/credentials/`: `hostkey_api.key`, `yandex_metrika.env`; также `~/.hermes/auth.json`, `google_client_secret.json`, `google_service_account.json`.
+- `~/sshd-tunnel/`: собственный sshd (host-ключи, `sshd_config`, `sshd.log`) — вход на Mac mini снаружи; запущен ли — не проверено (в процессах не видно).
+- ssh-agent пустой (ключи используются через `-i`, не через агент).
+
 ## Не проверено / дальше
-1. Откуда LLM-ключи у `repetitor-api`; таблицы `data.db`.
-2. Доступы Hermes на Mac mini (`~/.hermes/.env` — только имена), `~/sshd-tunnel`, ключи `id_ed25519_agent`, `tunnel_key`.
+1. Откуда LLM-ключи у `repetitor-api` (systemd Environment); таблицы `data.db`.
+2. Реальная работоспособность токенов из п.11 (GitHub, Telegram, Bitrix, LLM) — проверять отдельно, без вывода значений.
+3. Запущен ли sshd из `~/sshd-tunnel` и как Mac mini доступен снаружи (Tailscale?).
