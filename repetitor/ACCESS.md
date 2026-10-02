@@ -92,9 +92,17 @@
 - У `repetitor-api.service` переменные окружения заданы прямо в unit-файле (`Environment=...`, значения не читались) — ключи LLM, скорее всего, там.
 
 ## Итог Шага 1
-Проверено и работает: сайты (200), SSH на оба сервера, туннели, сервис репетитора. Нет git и бэкапа у кода репетитора. Известные ошибки: `updated_at`, пустой ответ с KB, LLM-ошибка в `insights`.
+Проверено и работает: сайты (200), SSH на оба сервера, туннели, сервис репетитора.
+
+## 13. Изменения после Шага 1 (2026-10-02/03)
+- Бэкапы на сервере: `/root/backups/` (`repetitor-data-*.db`, `repetitor-code-*.tgz`, `backend.py.pre-fix*`).
+- Безопасность: `REPETITOR_SECRET` не был задан (токены подписывались ключом по умолчанию). Теперь задан случайный через drop-in `/etc/systemd/system/repetitor-api.service.d/secret.conf` (права 600, значение не в репозитории). Сессии пользователей сброшены.
+- Код репетитора теперь в git: `repetitor/app/backend`, `repetitor/app/frontend` (без `data.db`).
+- Исправлено: `updated_at` -> `generated_at`; `_llm_json` (устойчивый разбор JSON, повтор, `max_tokens=3000`) для `insights`. Задеплоено, сервис active, логи за 2 часа без ошибок.
+- Деплой: `scp backend.py root@194.34.238.17:/opt/repetitor/` + `systemctl restart repetitor-api`; откат — из `/root/backups/backend.py.pre-fix2`. ВАЖНО: источник правды — git; перед правкой на сервере сверять с репозиторием.
 
 ## Не проверено / дальше
-1. Реальная работоспособность токенов из п.11 (GitHub, Telegram, Bitrix, LLM) — проверять отдельно, без вывода значений.
+1. Работоспособность токенов Hermes (GitHub, Telegram, Bitrix, LLM) — проверять отдельно, без вывода значений.
 2. Запущен ли sshd из `~/sshd-tunnel`, как Mac mini доступен снаружи (Tailscale?).
 3. Назначение ключей `id_ed25519_agent`, `tunnel_key`.
+4. Фронт и kartunov.space без git; kartunov.space не в репозитории.
