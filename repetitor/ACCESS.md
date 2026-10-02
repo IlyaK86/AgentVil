@@ -56,8 +56,20 @@
 - kartunov.space: nginx сайт `kartunov.space` на этом же сервере (корень/прокси — детали конфига не смотрели); `margin-offer-api` обслуживает /lead.
 - В `/root`: `hardening-backup-20261001` (недавний hardening — учесть при смене доступов), `hermes-migrate-v0.20.0.sh`.
 
+## 9. Репетитор — детали (проверено на 194.34.238.17)
+- Бэкенд `/opt/repetitor`: `backend.py` (119 КБ, FastAPI), `db.py`, `rag.py`, `kb/` (база знаний), `data.db` (SQLite, обновлялась 2026-10-01), `__pycache__`.
+- Запуск: `repetitor-api.service`, `ExecStart=/usr/local/lib/hermes-agent/venv/bin/python /opt/repetitor/backend.py`, `WorkingDirectory=/opt/repetitor`; active с 2026-09-12; внутренний порт 8097 (nginx `/repetitor-api/` -> 127.0.0.1:8097, timeouts 300s, body до 20m).
+- Фронт: `/var/www/html/repetitor/` (nginx `alias`, SPA fallback на index.html); админка: `/repetitor-admin/` -> `/var/www/html/repetitor/admin.html`.
+- Git: `/opt/repetitor` НЕ является git-репозиторием (нет истории, нет remote) — код живёт только на сервере. Рекомендуется завести репозиторий/бэкап.
+- `.env` в `/opt/repetitor` нет; откуда берутся ключи LLM (переменные systemd/ Hermes venv) — не выяснено.
+- Свежие проблемы в логах (2026-10-01):
+  - `[auth_me interests] no such column: updated_at` (схема БД расходится с кодом);
+  - `[chat] empty answer with KB, retrying without KB`;
+  - `[insights] LLM error: Expecting value: line 1 column 1` (LLM вернул не-JSON/пусто).
+  - внешние сканеры бьют по `/metrics`, `/` (404) — шум.
+- kartunov.space: nginx server `kartunov.space`, root `/var/www/kartunov.space`; `/lead-ask/` -> 127.0.0.1:8098 (margin-offer-api); `/lead`, `/offer` редиректы. Деплой — копирование файлов в `/var/www/kartunov.space` (git/CI не проверялись).
+
 ## Не проверено / дальше
-1. Содержимое `/opt/repetitor` (код, БД, `.env` — только имена переменных), статус `repetitor-api` (логи, порт).
-2. Конфиг nginx `kartunov.space` (root/прокси) и способ деплоя сайта (git/rsync/панель).
-3. Доступы Hermes по пунктам (ключи, БД, Google, Telegram).
-4. Назначение ключей `id_ed25519_agent`, `tunnel_key`; папка `~/sshd-tunnel`.
+1. Фронт `/var/www/html/repetitor` (состав, git?) и `/var/www/kartunov.space` (git?), скрипты деплоя.
+2. Откуда LLM-ключи у `repetitor-api` (имена переменных).
+3. Доступы Hermes на Mac mini (`~/.hermes/.env` — только имена), `~/sshd-tunnel`, назначение ключей `id_ed25519_agent`, `tunnel_key`.
