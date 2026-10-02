@@ -43,8 +43,21 @@
 - DNS `hermes.vilavi.tech` -> `194.34.238.17` (тот же сервер, что kartunov.space; вход есть, ключ `id_ed25519_new_server`). Значит `/repetitor/` раздаётся с него, а НЕ с `147.45.147.124`.
 - На `147.45.147.124` порты 8080/8081/8082/8501 на `/repetitor/` не отвечают как сайт (000/404/404/301); сервисы VILAVI (hub, dashboard, Streamlit :8501). `/var/www/html` там: `reports`, `stock-risk.html`.
 
+## 8. Основной сервер `194.34.238.17` (12700.example.de) — репетитор и сайты
+Вход: `ssh -i ~/.ssh/id_ed25519_new_server root@194.34.238.17` (порт 22) — работает.
+
+- Репетитор:
+  - фронт: `/var/www/html/repetitor` (nginx `location /repetitor/`, `= /repetitor`);
+  - бэкенд: `/opt/repetitor`, systemd `repetitor-api.service` (FastAPI), запущен; nginx `location /repetitor-api/` и `/repetitor-admin/`;
+  - скиллы Hermes: `/root/.hermes/skills/vilavi/vilavi-repetitor`, `vilavi-repetitor-admin`; тест `/tmp/test_repetitor_socratic.py`.
+- nginx `/etc/nginx/sites-enabled`: `hermes` (server_name hermes.vilavi.tech; бэкапы `hermes.bak-*`, в т.ч. `hermes.bak-20260720`), `kartunov.space`, `podcast.kartunov.space`, плюс `admin.vilavi.tech`. Прокси на 127.0.0.1: 8081, 8090–8097, 8443, 8501, 8502.
+- Другие сервисы systemd (запущены): `hermes-ask*` (analyst, b24_secretary :8092, lawyer :8096, orchestrator :8095, pm :8093, supply :8094, основной :8090), `margin-offer-api` (для kartunov.space/lead), `vilavi-api`, `vilavi-dashboard` (:8501), `dispatcher`, `ollama` (:11434), `redis`, `tailscaled`, `fail2ban`, `nginx`.
+- Tailscale на сервере активен (100.71.157.74).
+- kartunov.space: nginx сайт `kartunov.space` на этом же сервере (корень/прокси — детали конфига не смотрели); `margin-offer-api` обслуживает /lead.
+- В `/root`: `hardening-backup-20261001` (недавний hardening — учесть при смене доступов), `hermes-migrate-v0.20.0.sh`.
+
 ## Не проверено / дальше
-1. Найти на `194.34.238.17` каталог/сервис `/repetitor/` (конфиг nginx, путь, процесс).
-2. Деплой kartunov.space и конфиг nginx на `194.34.238.17` (вход есть).
+1. Содержимое `/opt/repetitor` (код, БД, `.env` — только имена переменных), статус `repetitor-api` (логи, порт).
+2. Конфиг nginx `kartunov.space` (root/прокси) и способ деплоя сайта (git/rsync/панель).
 3. Доступы Hermes по пунктам (ключи, БД, Google, Telegram).
-4. Содержимое `~/sshd-tunnel`, `~/.hermes/hermes_gateway.sh`.
+4. Назначение ключей `id_ed25519_agent`, `tunnel_key`; папка `~/sshd-tunnel`.
