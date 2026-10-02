@@ -87,7 +87,14 @@
 - `~/sshd-tunnel/`: собственный sshd (host-ключи, `sshd_config`, `sshd.log`) — вход на Mac mini снаружи; запущен ли — не проверено (в процессах не видно).
 - ssh-agent пустой (ключи используются через `-i`, не через агент).
 
+## 12. БД репетитора и окружение
+- `/opt/repetitor/data.db` (SQLite), таблицы: `users`, `auth_tokens`, `chat_logs`, `learning_progress`, `learning_insights`, `topic_difficulty`, `subscription_events`.
+- У `repetitor-api.service` переменные окружения заданы прямо в unit-файле (`Environment=...`, значения не читались) — ключи LLM, скорее всего, там.
+
+## Итог Шага 1
+Проверено и работает: сайты (200), SSH на оба сервера, туннели, сервис репетитора. Нет git и бэкапа у кода репетитора. Известные ошибки: `updated_at`, пустой ответ с KB, LLM-ошибка в `insights`.
+
 ## Не проверено / дальше
-1. Откуда LLM-ключи у `repetitor-api` (systemd Environment); таблицы `data.db`.
-2. Реальная работоспособность токенов из п.11 (GitHub, Telegram, Bitrix, LLM) — проверять отдельно, без вывода значений.
-3. Запущен ли sshd из `~/sshd-tunnel` и как Mac mini доступен снаружи (Tailscale?).
+1. Реальная работоспособность токенов из п.11 (GitHub, Telegram, Bitrix, LLM) — проверять отдельно, без вывода значений.
+2. Запущен ли sshd из `~/sshd-tunnel`, как Mac mini доступен снаружи (Tailscale?).
+3. Назначение ключей `id_ed25519_agent`, `tunnel_key`.
